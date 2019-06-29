@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title></title>
+
+	<!--Bootstrap references-->
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+  	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+
+  	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<!-- Underscore and backbone JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+
+	<!-- Date Range PickerJS -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+	<!--Plotly reference-->
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+	<!--Leaflet CSS file references-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   	crossorigin=""/>
+
+   	<!-- Make sure you put this AFTER Leaflet's CSS -->
+ 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   	crossorigin=""></script>
+
+	<!--the following CSS is used to set the size of the Map-->
+	<style type="text/css">#mapid{height: 180px; }</style>
+
+	<!--the following links incorporate the CSS required for custom icon creation -->
+	<link rel="stylesheet" href="./css/ionicons.min.css">
+	<link rel="stylesheet" href="./css/leaflet.awesome-markers.css">
+	<script src="./js/leaflet.awesome-markers.js"></script>
+
+</head>
+<body>
+
+  	<div class="container-fluid">
+
+  		<!-- Header Section -->
+  		<div class="col"><h1>Crime Dashboard</h1></div>
+
+	  	<div class="row">
+			<div class="col-lg-6">
+				<!-- Dropdown input to select grouping factor -->
+				<label for="group"><b>Offence Group</b></label>
+				<select id="offence" name="offence" onchange= "getValue()" class="form-control">
+				</select>
+			</div>
+			<div class="col-lg-3">
+				<label for="startDate"><b>Start Date</b></label>
+				<input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" onclick="datePicker()">
+			</div>
+
+			<div class="col-lg-3 col-lg-offset-3">
+				<label for="endDate"><b>End Date</b></label>
+				<input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" onclick="datePicker()" onchange= "getValue()">
+			</div>
+
+			<div class="col-lg-3" >
+				<label for="group"><b>Arrest</b></label>
+				<select id="arrest" onchange= "getValue()" class="form-control">
+				</select>
+			</div>
+			<div class="col-lg-3 col-lg-offset-3">
+				<label for="group"><b>Domestic</b></label>
+				<select id="domestic" onchange= "getValue()" class="form-control">
+				</select>
+			</div>
+			<div class="col-lg-6 col-lg-offset-2">
+				<table class="table">
+				    <thead>
+						<tr>
+							<th></th>
+							<th class="text-right">Crime Rate (per 1000 pop)</th>
+							<th class="text-right">Crime Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><b>Total</b></td>
+							<td class="text-right">1000</td>
+							<td class="text-right">10000</td>
+						</tr>
+				    </tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6" id="map" style="height: 600px"></div>
+		<!-- 	<div class="col-lg-6 col-lg-offset-2">
+				<div id="graph1" style="height: 350px"></div>
+				<div id="graph" style="height: 350px"></div>
+			</div> -->
+		</div>
+  	</div>
+
+	<!--reference JS scripts -->
+	<!-- <script src="js/graph.js"></script> -->
+ 	<script src="js/leaflet.awesome-markers.js"></script>
+ 	<script src="js/leaflet.js"></script>
+ 	<script src="js/loadJSON.js"></script>
+ 	<!-- <script src="js/timeFilter.js"></script> -->
+
+
+</body>
+</html>
