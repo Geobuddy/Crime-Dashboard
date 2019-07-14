@@ -75,6 +75,7 @@ $(document).ready(
     	changeMonth: true,
     	numberOfMonths: 1,
     	dateFormat: 'yy-mm-dd',
+    	changeYear: true,
     	onClose: function( selectedDate ) {
     		$( "#endDate" ).datepicker( "option", "minDate", selectedDate );
 		}
@@ -85,6 +86,7 @@ $(document).ready(
 		changeMonth: true,
 		numberOfMonths: 1,
 		dateFormat: 'yy-mm-dd',
+		changeYear: true,
 		onClose: function( selectedDate ) {
     		$( "#startDate" ).datepicker( "option", "maxDate", selectedDate );
 	  	}
@@ -92,55 +94,75 @@ $(document).ready(
 
 	});
 
-function getOffence(){
+
+
+
+// var layer;
+// // Initial Setup  with layer Verified No
+// layer = L.geoJson(null, {
+// 	pointToLayer: function (feature, latlng) {
+// 		// body...
+// 		return L.circleMarker(latlng, {
+// 			color: "black",
+// 			fillcolor: "red",
+// 			fillOpacity: 1,
+// 			radius: 8
+// 		})
+// 	},
+// 	onEachFeature: function (feature, layering) {
+// 		// body...
+// 		layering.bindPopup("<b>"+feature.properties.primary_type +"</b>");
+// 	},
+// 	filter: function (feature, layering) {
+// 		// body...
+// 		return (feature.properties.primary_type == $("#crimeType").val())
+// 	}
+
+// })
+
+
+
+
+function filterData() {
 	var offence= $("#crimeType").val();
-	// console.log(Offence);
-	fitlerData(offence);
-};
-
-function getArrest(){
 	var arrest= $("#arrest").val();
-	// console.log(arrest);
-	fitlerData(arrest);
-};
-
-function getDomestic(){
 	var domestic= $("#domestic").val();
-	// console.log(domestic);
-	fitlerData(domestic);
-};
-
-function getStartDate(){
 	var startDate= $("#startDate").val();
-	// var selectedEnd= $("#endDate").val();
-	// console.log(selectedStart);
-	fitlerData(startDate);
-};
-
-function getEndDate(){
 	var endDate= $("#endDate").val();
-	// console.log(endDate);
-	fitlerData(endDate);
-};
+	console.log(offence, arrest, domestic, startDate,endDate);
 
-function fitlerData(offence,arrest,domestic,startDate,endDate) {
 
 	$.ajax({
 		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?',
 		method: "GET",
 		dataType: "json",
         data: {
-          "$where": "primary_type = '" + offence + "'",
-          // + " AND date >'" + startDate + "'",
-          // + " AND date <'" + endDate + "'"
-          // + " AND primary_type = '" + offence + "'" 
-          // + " AND arrest = " + arrest 
-          // + " AND domestic = " + domestic,
-          "$limit" : 200
+        	"$select" : "ward, primary_type"
+        	+ ", "
+        	+ 'count(primary_type) as offence',
+        	"$group" : "ward, primary_type",
+        	"$where" : "primary_type ='" + offence + "'",
+        	"arrest" : arrest,
+        	"domestic" : domestic
+        	+ " AND date >'" + startDate + "'"
+        	+ " AND date <'" + endDate + "'",
+        	"$order" : "ward"
+        	
+			
+        	
+        	
+
+
+          // "$where": "date >'" + startDate + "'"
+          // + " AND date <'" + endDate + "'",
+          // "primary_type" : offence,
+          // "arrest" : arrest,
+          // "domestic" : domestic,
+          // "$limit" : 200
+          // "$group": offence
       	},
 	})
 	.done(function(data) {
-
 		// $.each(data.features, function (i, feature) {
 		// 	console.log(i,feature);
 		// 	domSelect.append(
@@ -148,33 +170,38 @@ function fitlerData(offence,arrest,domestic,startDate,endDate) {
 		// 	// body...
 		// });
 		// add the JSON layer onto the map - it will appear using the default icons 
-		$("#crimeType").change(function() {
 			/* Act on the event */
-			layer = L.geoJson(data,{
-			//use point to layer to create the points
-				pointToLayer: function (feature,latlng){
-			return new L.marker(latlng, {icon:testMarkerRed}).bindPopup("<b>"+feature.properties.primary_type +"</b>");
-			},
-			}).addTo(map); 
-			map.fitBounds(layer.getBounds());
+			layer = L.geoJson(data, {
+				pointToLayer: function (feature, latlng) {
+					// body...
+					return L.circleMarker(latlng, {
+						color: "blue",
+						fillcolor: "red",
+						fillOpacity: 1,
+						radius: 5
+					})
+				},
+				onEachFeature: function (feature, layering) {
+					// body...
+					layering.bindPopup("<b>"+feature.properties.primary_type +"</b>");
+				},
+				filter: function (feature, layering) {
+					// body...
+					if (feature.properties.primary_type == $("#crimeType").val()){
+						return (feature.properties.primary_type == $("#crimeType").val())
+					}
+					else{
+						return (feature.properties.primary_type)
+					}
+					
+				},
 
-		});
-		// layer = L.geoJson(data,
-		// {
-		// 	//use point to layer to create the points
-		// 	pointToLayer: function (feature,latlng)
-		// 	{
-		// 	// look at the GeoJSON file - specifically at the properties - to see the earthquake magnitude and use a different marker depending on this value
-		// 	// also include a pop-up that shows the place value of the earthquakes 
-		// 	return L.marker(latlng, {icon:testMarkerRed}).bindPopup("<b>"+feature.properties.primary_type +"</b>");
-		// },
-		// }).addTo(map); 
-		// map.fitBounds(layer.getBounds());
+			}).addTo(map); 
+			// map.fitBounds(layer.getBounds());
 		console.log(data);
 		console.log("success");
 	})
 
 }
-
 
 
