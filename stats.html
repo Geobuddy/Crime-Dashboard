@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<title></title>
 
 	<!--Bootstrap references-->
@@ -12,11 +13,11 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
-  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 
-  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
@@ -34,10 +35,6 @@
 	
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-	<!-- D3.JS -->
-	<script src="//d3js.org/d3.v3.min.js"></script>
-	<script src="//d3js.org/topojson.v1.min.js"></script>
-	<script src="//d3js.org/queue.v1.min.js"></script>
 
 	<!--Plotly reference-->
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -52,7 +49,7 @@
    	crossorigin=""></script>
 
 	<!--the following CSS is used to set the size of the Map-->
-	<style type="text/css">#map{height: 180px; }</style>
+	<style type="text/css">#mapid{height: 180px; }</style>
 
 	<!--the following links incorporate the CSS required for custom icon creation -->
 	<link rel="stylesheet" href="./css/ionicons.min.css">
@@ -61,59 +58,57 @@
 
 </head>
 <body>
-
-  	<div id="tabs" class="container-fluid">
+	<div id="tabs" class="container-fluid">
 		<div ><h5 class="header" >Crime Dashboard</h5></div>
 		<ul class="nav nav-tabs">
-			<li class="nav-item"><a class="nav-link active" href="index.html">MAIN</a>
+			<li class="nav-item"><a class="nav-link" href="index.html">MAIN</a>
 			</li>
-		    <li class="nav-item"><a class="nav-link" href="stats.html">ANALYSIS</a>
+		    <li class="nav-item"><a class="nav-link active" href="stats.html">ANALYSIS</a>
 		    </li>
 		    <li class="nav-item"><a class="nav-link" href="data.html">DATA</a>
 		    </li>
 		    <li class="nav-item"><a class="nav-link" href="about.html">ABOUT</a>
 		    </li>
 		</ul>	  	
-		<div id="tabs-1" class="container-fluid">
+		<div id="tabs-2" class="container-fluid">
 
-	  	<div class="row">
-			<div class="col-lg-6">
-				<!-- Dropdown input to select grouping factor -->
-				<label for="group"><b>Offence Group</b></label>
-				<select id="crimeType" name="crimeType" onchange="filterData()" class="form-control"><option value="ARSON" selected="selected"> ARSON</option>
-				</select>
-			</div>
-			<div class="col-lg-3">
-				<label for="startDate"><b>Start Date</b></label>
-				<input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" onchange="filterData()" value="2010-07-08">
-			</div>
+		  	<div class="row">
+				<div class="col-lg-6">
+					<!-- Dropdown input to select grouping factor -->
+					<label for="group"><b>Offence Group</b></label>
+					<select id="crimeType" name="crimeType" onchange="getOffence()" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+					</select>
+				</div>
+				<div class="col-lg-3">
+					<label for="startDate"><b>Start Date</b></label>
+					<input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" onchange="getStartDate()">
+				</div>
 
-			<div class="col-lg-3 col-lg-offset-3">
-				<label for="endDate"><b>End Date</b></label>
-				<input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate"  onchange= "filterData()" value="2019-07-08">
-			</div>
+				<div class="col-lg-3 col-lg-offset-3">
+					<label for="endDate"><b>End Date</b></label>
+					<input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate"  onchange= "getEndDate()">
+				</div>
 
-			<div class="col-lg-3" >
-				<label for="group"><b>Arrest</b></label>
-				<select id="arrest" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> true</option>
-				</select>
+				<div class="col-lg-3" >
+					<label for="group"><b>Arrest</b></label>
+					<select id="arrest" onchange= "getArrest()" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+					</select>
+				</div>
+				<div class="col-lg-3 col-lg-offset-3">
+					<label for="group"><b>Domestic</b></label>
+					<select id="domestic" onchange= "getDomestic()" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+					</select>
+				</div>
 			</div>
-			<div class="col-lg-3 col-lg-offset-3">
-				<label for="group"><b>Domestic</b></label>
-				<select id="domestic" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> true</option>
-				</select>
+			<div class="row">
+				<div class="col-lg-12" id="map" style="height: 600px"></div>
+			<!-- 	<div class="col-lg-6 col-lg-offset-2">
+					<div id="graph1" style="height: 350px"></div>
+					<div id="graph" style="height: 350px"></div>
+				</div> -->
 			</div>
-		</div>
-		</div>
-		<div class="row" style="margin-left: 15px ; margin-top: 35px">
-			<div class="col-lg-5.5" id="map" style="height: 500px; width: 690px"></div>
-			<div class="col-lg-6 col-lg-offset-2">
-				<!-- <div id="graph1" style="height: 350px"></div> -->
-				<div class="col-lg-5.5" id="graph3" style="height: 500px; width: 690px"></div>
-			</div>
-		</div>
-  	</div>
-
+	  	</div>
+	</div>
 	<!--reference JS scripts -->
 	<!-- <script src="js/graph.js"></script> -->
  	<script src="js/leaflet.awesome-markers.js"></script>
