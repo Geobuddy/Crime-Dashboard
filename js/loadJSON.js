@@ -94,12 +94,7 @@ $(document).ready(
 	  	},
 	});
 
-    var baseLayers = {
-					"OSM": osm,
-					"Mapbox": mapbox
-				};
 
-	L.control.layers(baseLayers).addTo(map);
 });
 
 
@@ -182,17 +177,13 @@ function filterData() {
 				},
 			}).done(function(boundaries) {
 				//Width and height
-				var w = 500;
-				var h = 300;
+				// var w = 500;
+				// var h = 300;
 
-				//Define map projection
-				var projection = d3.geo.albersUsa()
-									   .translate([w/2, h/2])
-									   .scale([500]);
+				//Define map projection/Define path generator
+				var transform = d3.geo.transform({point: projectPoint}),
+				path = d3.geo.path().projection(transform);
 
-				//Define path generator
-				var path = d3.geo.path()
-								 .projection(projection);
 								 
 				//Define quantize scale to sort data values into buckets of color
 				var color = d3.scale.quantize()
@@ -200,10 +191,8 @@ function filterData() {
 									//Colors taken from colorbrewer.js, included in the D3 download
 
 				//Create SVG element
-				var svg = d3.select("#graph3")
-							.append("svg")
-							.attr("width", "100%")
-							.attr("height", "100%");
+				var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+      				g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 					color.domain([
 						d3.min(crime.features, function(d) { return d.properties.offence; }),
@@ -228,13 +217,31 @@ function filterData() {
 						}
 					}
 
-				svg.selectAll("path")	
+				var feature = g.selectAll("path")	
 					.data(myBoundary)
 					.enter()
-					.append("path")
-					.attr("d", path)
-					.style("fill", function(d) {
-						console.log(d);
+					.append("path");
+
+				map.on("viewrest", reset);
+				reset ();
+
+				function reset() {
+					// body...
+					bounds = path.bounds(boundaries);
+					var topLeft = bounds[0],
+						bottomRight = bounds[1];
+					svg .attr("width", bottomRight[0] - topLeft[0])
+						.attr("height", bottomRight[1] - topLeft[1])
+						.style("left", topLeft[0] + "px")
+						.style("top", topLeft[1] + "px");
+					g .attr("transform", "translate(" + -topLeft[0] + "," 
+					                                  + -topLeft[1] + ")");
+
+					feature.attr("d", path)
+					feature.style("stroke", "grey")
+					feature.style("opacity", 0.7)
+					feature.style("fill", function(d) {
+						// console.log(d);
 					//Get data value
 						var value = d.properties.value;
 						
@@ -246,17 +253,16 @@ function filterData() {
 							return "#ccc";
 						}
 					});
+				}
 
-				// var baseLayers = {
-				// 	"OSM": osm,
-				// 	"Mapbox": mapbox
-				// };
-				var overlays = {};
+				function projectPoint(x, y) {
+					// body...
+					var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+					this.stream.point(point.x, point.y);
+				}
 
-				var line = new L.polygon(svg).addTo(map);
-				console.log(line);
 
-				
+
 
 			});
 			
