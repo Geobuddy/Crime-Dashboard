@@ -14,14 +14,14 @@ $(document).ready(
 				$("<option></option>").val(feature.properties.primary_type).html(feature.properties.primary_type))
 		});
 
-		console.log(data);
-		console.log("success");
+		// console.log(data);
+		// console.log("success");
 	})
 	.fail(function() {
-		console.log("error");
+		// console.log("error");
 	})
 	.always(function() {
-		console.log("complete");
+		// console.log("complete");
 	});
 
 
@@ -30,21 +30,20 @@ $(document).ready(
 		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?$select=distinct arrest&$order=arrest DESC'
 	})
 	.done(function(data) {
-		console.log(data);
+		// console.log(data);
 		$.each(data.features, function (i, feature) {
-			console.log(i,feature);
+			// console.log(i,feature);
 			arrSelect.append(
-				$("<option></option>").val(feature.properties.arrest).html(feature.properties.arrest))
-			// body...
+				$("<option></option>").val(feature.properties.arrest).html(feature.properties.arrest.toString().toUpperCase()))
 		});
-		console.log(data);
-		console.log("success");
+		// console.log(data);
+		// console.log("success");
 	})
 	.fail(function() {
-		console.log("error");
+		// console.log("error");
 	})
 	.always(function() {
-		console.log("complete");
+		// console.log("complete");
 	});
 
 	var domSelect = $("#domestic")
@@ -52,21 +51,21 @@ $(document).ready(
 		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?$select=distinct domestic&$order=domestic DESC'
 	})
 	.done(function(data) {
-		console.log(data);
+		// console.log(data);
 		$.each(data.features, function (i, feature) {
-			console.log(i,feature);
+			// console.log(feature);
 			domSelect.append(
-				$("<option></option>").val(feature.properties.domestic).html(feature.properties.domestic))
+				$("<option></option>").val(feature.properties.domestic).html(feature.properties.domestic.toString().toUpperCase()))
 			// body...
 		});
-		console.log(data);
-		console.log("success");
+		// console.log(data);
+		// console.log("success");
 	})
 	.fail(function() {
-		console.log("error");
+		// console.log("error");
 	})
 	.always(function() {
-		console.log("complete");
+		// console.log("complete");
 	});
 
 
@@ -150,6 +149,53 @@ function filterData() {
  //      		ajaxData.;
 
 
+ 	// var reqDataOne={
+  //       	"$select" : "ward, primary_type"
+  //       	+ ", "
+  //       	+ 'count(primary_type) as offence',
+  //       	"$group" : "ward, primary_type",
+  //       	"$where" : "primary_type ='" + offence + "'",
+  //       	"arrest" : arrest,
+  //       	"domestic" : domestic
+  //       	+ " AND date >'" + startDate + "'"
+  //       	+ " AND date <'" + endDate + "'",
+  //       	"$order" : "ward"
+        	
+  //     	}
+
+
+  //   var reqDataTwo={
+  //       	"$select" : "ward, primary_type"
+  //       	+ ", "
+  //       	+ 'count(primary_type) as offence',
+  //       	"$group" : "ward, primary_type",
+  //       	"$where" : "primary_type ='" + offence + "'",
+  //       	"arrest" : arrest,
+  //       	"domestic" : domestic
+  //       	+ " AND date >'" + startDate + "'"
+  //       	+ " AND date <'" + endDate + "'",
+  //       	"$order" : "ward"
+        	
+  //     	}
+
+      	// function () {
+      	// 	// body...
+      	// 	var data = {
+      	// 		"$select" : "ward, primary_type"
+       //  		+ ", "
+       //  		+ 'count(primary_type) as offence',
+       //  		"$group" : "ward, primary_type",
+       //  		"$where" : "date >'" + startDate + "'"
+       //  		+ " AND date <'" + endDate + "'",
+       //  		"arrest" : arrest,
+       //  		"domestic" : domestic,
+       //  		"primary_type" : offence,
+       //  		"$order" : "ward",
+      	// 	}
+      	// }
+
+
+
 	$.ajax({
 		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?',
 		method: "GET",
@@ -159,16 +205,15 @@ function filterData() {
         	+ ", "
         	+ 'count(primary_type) as offence',
         	"$group" : "ward, primary_type",
-        	"$where" : "primary_type ='" + offence + "'",
-        	"arrest" : arrest,
-        	"domestic" : domestic
-        	+ " AND date >'" + startDate + "'"
+        	"$where" : "date >'" + startDate + "'"
         	+ " AND date <'" + endDate + "'",
+        	"arrest" : arrest,
+        	"domestic" : domestic,
+			"primary_type" : offence,
         	"$order" : "ward"
-        	
       	},
 	}).done(function(crime) {
-
+			console.log(crime);
 			$.ajax({
 				url: 'https://data.cityofchicago.org/resource/k9yb-bpqx.geojson',
 				type: 'GET',
@@ -181,14 +226,17 @@ function filterData() {
 				// var h = 300;
 
 				//Define map projection/Define path generator
-				var transform = d3.geo.transform({point: projectPoint}),
-				path = d3.geo.path().projection(transform);
+				var transform = d3.geoTransform({point: projectPoint}),
+				path = d3.geoPath().projection(transform);
 
 								 
 				//Define quantize scale to sort data values into buckets of color
-				var color = d3.scale.quantize()
+				var color = d3.scaleQuantile()
 									.range(["rgb(237,248,233)","rgb(186,228,179)","rgb(116,196,118)","rgb(49,163,84)","rgb(0,109,44)"]);
 									//Colors taken from colorbrewer.js, included in the D3 download
+
+				// Redraw updated SVG layer - https://stackoverflow.com/questions/34088550/d3-how-to-refresh-a-chart-with-new-data/34184333
+				d3.select("svg").remove(); 
 
 				//Create SVG element
 				var svg = d3.select(map.getPanes().overlayPane).append("svg"),
@@ -222,7 +270,7 @@ function filterData() {
 					.enter()
 					.append("path");
 
-				map.on("viewrest", reset);
+				map.on("zoom", reset);
 				reset ();
 
 				function reset() {
@@ -238,7 +286,7 @@ function filterData() {
 					                                  + -topLeft[1] + ")");
 
 					feature.attr("d", path)
-					feature.style("stroke", "grey")
+					feature.style("stroke", "black")
 					feature.style("opacity", 0.7)
 					feature.style("fill", function(d) {
 						// console.log(d);
@@ -250,7 +298,7 @@ function filterData() {
 							return color(value);
 						} else {
 							//If value is undefined…
-							return "#ccc";
+							return "#c8c8c8";
 						}
 					});
 				}
@@ -304,5 +352,3 @@ function filterData() {
 	});
 
 };
-
-

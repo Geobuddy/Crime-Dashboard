@@ -1,5 +1,5 @@
     // load the map
-var map = new L.map('map', {center: [41.82, -87.68], zoom: 10});
+var map = new L.map('map', {center: [41.85, -87.73], zoom: 10});
 
 
 // load the tiles
@@ -15,9 +15,17 @@ attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</
 id: 'mapbox.streets'
 }).addTo(map);
 
+var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+}).addTo(map);
+
 var baseLayers = {
 				"OSM": osm,
-				"Mapbox": mapbox
+				"Mapbox": mapbox,
+				"CartoDB": CartoDB_DarkMatter
 				};	
 
 L.control.layers(baseLayers).addTo(map);
+

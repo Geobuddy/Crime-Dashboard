@@ -35,7 +35,8 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 	<!-- D3.JS -->
-	<script src="//d3js.org/d3.v3.min.js"></script>
+	<script src="//d3js.org/d3.v5.min.js"></script>
+	<script src="//d3js.org/d3-tile.v0.0.min.js"></script>
 	<script src="//d3js.org/topojson.v1.min.js"></script>
 	<script src="//d3js.org/queue.v1.min.js"></script>
 
@@ -65,13 +66,13 @@
   	<div id="tabs" class="container-fluid">
 		<div ><h5 class="header" >Crime Dashboard</h5></div>
 		<ul class="nav nav-tabs">
-			<li class="nav-item"><a class="nav-link active" href="index.html">MAIN</a>
+			<li class="nav-item"><a class="nav-link active py-0" href="index.html">MAIN</a>
 			</li>
-		    <li class="nav-item"><a class="nav-link" href="stats.html">ANALYSIS</a>
+		    <li class="nav-item"><a class="nav-link py-0" href="stats.html">ANALYSIS</a>
 		    </li>
-		    <li class="nav-item"><a class="nav-link" href="data.html">DATA</a>
+		    <li class="nav-item"><a class="nav-link py-0" href="data.html">DATA</a>
 		    </li>
-		    <li class="nav-item"><a class="nav-link" href="about.html">ABOUT</a>
+		    <li class="nav-item"><a class="nav-link py-0" href="about.html">ABOUT</a>
 		    </li>
 		</ul>	  	
 		<div id="tabs-1" class="container-fluid">
@@ -80,7 +81,7 @@
 			<div class="col-lg-6">
 				<!-- Dropdown input to select grouping factor -->
 				<label for="group"><b>Offence Group</b></label>
-				<select id="crimeType" name="crimeType" onchange="filterData()" class="form-control"><option value="ARSON" selected="selected"> ARSON</option>
+				<select id="crimeType" name="crimeType" onchange="filterData()" class="form-control"><option value="ARSON" selected="selected"> -- All --</option>
 				</select>
 			</div>
 			<div class="col-lg-3">
@@ -95,18 +96,18 @@
 
 			<div class="col-lg-3" >
 				<label for="group"><b>Arrest</b></label>
-				<select id="arrest" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> true</option>
+				<select id="arrest" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> -- All --</option>
 				</select>
 			</div>
 			<div class="col-lg-3 col-lg-offset-3">
 				<label for="group"><b>Domestic</b></label>
-				<select id="domestic" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> true</option>
+				<select id="domestic" onchange= "filterData()" class="form-control"><option value="true" selected="selected"> -- All --</option>
 				</select>
 			</div>
 		</div>
 		</div>
-		<div class="row" style="margin-left: 15px ; margin-top: 35px">
-			<div class="col-lg-5.5" id="map" style="height: 600px; width: 600px"></div>
+		<div class="row" style="margin-left: 15px ; margin-top: 15px">
+			<div class="col-lg-5.5" id="map" style="height: 680px; width: 680px"></div>
 			<div class="col-lg-6 col-lg-offset-2">
 				<!-- <div id="graph1" style="height: 350px"></div> -->
 				<!-- <div class="col-lg-5.5" id="graph3" style="height: 500px; width: 690px"></div> -->
