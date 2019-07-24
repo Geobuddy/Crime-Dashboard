@@ -1,5 +1,5 @@
     // load the map
-var map = new L.map('map', {center: [41.85, -87.73], zoom: 10});
+var map = new L.map('map', {center: [41.85, -87.73], zoom: 10}, {doubleClickZoom: false});
 
 
 // load the tiles
@@ -27,5 +27,21 @@ var baseLayers = {
 				"CartoDB": CartoDB_DarkMatter
 				};	
 
+
 L.control.layers(baseLayers).addTo(map);
 
+
+// https://stackoverflow.com/questions/40108280/how-to-hide-svg-elements-with-javascript-on-a-button-click
+// https://stackoverflow.com/questions/50375766/hide-and-show-svg-element-with-transition
+function toggleDisplay() {
+  var rects = document.getElementsByClassName('svg1');
+  var i;
+  
+  for (i = 0; i < rects.length; i++) {
+    if (rects[i].style.display == 'none') {
+      rects[i].style.display = 'block';
+    } else {
+      rects[i].style.display = 'none';
+    }
+  }
+}

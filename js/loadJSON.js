@@ -4,7 +4,7 @@ $(document).ready(
 	var offSelect = $("#crimeType")
 	
 	$.ajax({
-		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?$select=distinct primary_type&$order=primary_type ASC'
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson?$select=distinct primary_type&$order=primary_type ASC'
 	})
 	.done(function(data) {
 		// console.log(data);
@@ -27,7 +27,7 @@ $(document).ready(
 
 	var arrSelect = $("#arrest")
 	$.ajax({
-		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?$select=distinct arrest&$order=arrest DESC'
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson?$select=distinct arrest&$order=arrest DESC'
 	})
 	.done(function(data) {
 		// console.log(data);
@@ -48,7 +48,7 @@ $(document).ready(
 
 	var domSelect = $("#domestic")
 	$.ajax({
-		url: 'https://data.cityofchicago.org/resource/vwwp-7yr9.geojson?$select=distinct domestic&$order=domestic DESC'
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson?$select=distinct domestic&$order=domestic DESC'
 	})
 	.done(function(data) {
 		// console.log(data);
@@ -96,7 +96,7 @@ $(document).ready(
 
 });
 
-
+var app_token = "GhcK7Cj79Lg5uRtd5hPdldrnY";
 function filterData() {
 	var offence= $("#crimeType").val();
 	var arrest= $("#arrest").val();
@@ -105,6 +105,8 @@ function filterData() {
 	var endDate= $("#endDate").val();
 	console.log(offence, arrest, domestic, startDate,endDate);
 
+// -------------------------- QUERY FOR CHOROPLETH LAYER IN SVG ---------------------
+
 	var formData = new FormData();
 
     var formData =  {
@@ -112,12 +114,15 @@ function filterData() {
         	+ ", "
         	+ 'count(primary_type) as offence',
         	"$group" : "ward",
-        	"$where" : "date >'" + startDate + "'"
-        	+ " AND date <'" + endDate + "'",
+        	"$where" : "date >='" + startDate + "'"
+        	+ " AND date <='" + endDate + "'"
+        	+ " AND latitude IS NOT NULL", 
         	"arrest" : arrest,
         	"domestic" : domestic,
 			"primary_type" : offence,
-        	"$order" : "ward"};
+        	"$order" : "ward",
+        	"$limit" : 200000,
+        	"$$app_token": app_token};
 
         if (offence == "All") {
 		  //  block of code to be executed if condition1 is true
@@ -159,8 +164,8 @@ function filterData() {
 				d3.select("svg").remove(); 
 
 				//Create SVG element
-				var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-      				g = svg.append("g").attr("class", "leaflet-zoom-hide");
+				var svg = d3.select(map.getPanes().overlayPane).append("svg");
+      				var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
       				// https://stackoverflow.com/questions/16348717/how-to-get-maximum-value-from-an-array-of-objects-to-use-in-d3-scale-linear-do
 					color.domain([
@@ -190,6 +195,7 @@ function filterData() {
 					.data(myBoundary)
 					.enter()
 					.append("path");
+					console.log(myBoundary);
 
 				map.on("zoom", reset);
 				reset ();
@@ -207,8 +213,9 @@ function filterData() {
 					                                  + -topLeft[1] + ")");
 
 					feature.attr("d", path)
+					feature.attr("class", "svg1")
 					feature.style("stroke", "black")
-					feature.style("opacity", 0.7)
+					feature.style("opacity", 0.6)
 					feature.style("fill", function(d) {
 						// console.log(d);
 					//Get data value
@@ -230,10 +237,42 @@ function filterData() {
 					this.stream.point(point.x, point.y);
 				}
 
-			});
+
+				// ---------- Plot Histogram for Crime count per Ward ---------------
+
+				var x = [];
+
+				for(var i =0; i < myCrime.length; i++){
+					x.push(myCrime[i].properties.offence);
 			
+				}
+				
+				var barChart = [{
+						x:x,
+						type: "histogram",
+						histfunc: "count",
+						}];
+
+				var layout = {
+					title: "Crime Histogram",
+					yaxis: {
+						title: "Count"
+					},
+					bargap: 0.05,
+					xbins: {
+						size:20000
+					}
+				};
+
+				
+
+				Plotly.newPlot('graph4', barChart,layout,{showSendToCloud: true});
+
+				});
 
 	});
+
+	// ------------------- QUERY TO PLOT CRIME COUNT PER TYPE ---------------------
 
 
 	var formDataGraph = new FormData();
@@ -243,12 +282,15 @@ function filterData() {
         	+ ", "
         	+ 'count(primary_type) as offence',
         	"$group" : "primary_type",
-        	"$where" : "date >'" + startDate + "'"
-        	+ " AND date <'" + endDate + "'",
+        	"$where" : "date >='" + startDate + "'"
+        	+ " AND date <='" + endDate + "'"
+        	+ " AND latitude IS NOT NULL",
         	"arrest" : arrest,
         	"domestic" : domestic,
 			"primary_type" : offence,
-        	"$order" : "offence DESC"};
+        	"$order" : "offence DESC",
+        	"$limit" : 200000,
+        	"$$app_token": app_token};
 
         if (offence == "All") {
 		  //  block of code to be executed if condition1 is true
@@ -266,72 +308,48 @@ function filterData() {
 		method: "GET",
 		dataType: "json",
         data: formDataGraph,
-	}).done(function(graphData) {
+	}).done(function( graphData) {
 		// console.log(graphData);
-
 		var data = graphData.features;
 
-		var margin = {top: 30, right: 0, bottom: 10, left:230};
-		height = parseInt(d3.select("#graph1").style("height")) - margin.top - margin.bottom,
-		width = parseInt(d3.select("#graph1").style("width")) - margin.left - margin.right;
+		var x = [];
+		var y = [];
 
 
-		x = d3.scaleLinear()
-		    .domain([0, d3.max(data, d => +d.properties.offence)])
-		    .range([margin.left, width - margin.right]);
+		for(var i =0; i < data.length; i++){
+			y.push(data[i].properties.primary_type);
+			x.push(+data[i].properties.offence);
+	
+		}
+		
+		var barChart = [{
+				x:x,
+				y:y,
+				type: "bar",
+				orientation: "h",
+				transforms: [{
+			    type: 'sort',
+			    target: 'y',
+			    order: 'descending'
+			 	}]
+				}];
 
-		y = d3.scaleBand()
-		    .domain(data.map(d => d.properties.primary_type))
-		    .range([margin.top, height - margin.bottom])
-		    .padding(0.1);
+		var layout = {
+			title: "Crime by Type",
+			xaxis: {
+				title: "Crime Count"
+			},
+			margins: {
+			l:"220px"	
+			}
 
-		xAxis = g => g
-		    .attr("transform", `translate(0,${margin.top})`)
-		    .call(d3.axisTop(x).ticks(width / 80))
-		    .call(g => g.select(".domain").remove());
+		};
 
-		yAxis = g => g
-		    .attr("transform", `translate(${margin.left},0)`)
-		    .call(d3.axisLeft(y).tickSizeOuter(0));
+		
 
-		format = x.tickFormat(20);
+		Plotly.newPlot('graph1', barChart,layout);
 
-		d3.select("#graph1").selectAll("svg").remove(); 
-
-		var barsvg = d3.select("#graph1").append("svg")
-						.attr("width", "100%")
-						.attr("height", "100%");
-
-		barsvg.append("g")
-		  .attr("fill", "steelblue")
-		.selectAll("rect")
-		.data(data)
-		.join("rect")
-		  .attr("x", x(0))
-		  .attr("y", d => y(d.properties.primary_type))
-		  .attr("width", d => x(+d.properties.offence) - x(0))
-		  .attr("height", y.bandwidth());
-
-		barsvg.append("g")
-		  .attr("fill", "white")
-		  .attr("text-anchor", "end")
-		  .style("font", "12px sans-serif")
-		.selectAll("text")
-		.data(data)
-		.join("text")
-		  .attr("x", d => x(+d.properties.offence) - 4)
-		  .attr("y", d => y(d.properties.primary_type) + y.bandwidth() / 2)
-		  .attr("dy", "0.35em")
-		  .text(d => format(+d.properties.offence));
-
-		barsvg.append("g")
-		  .call(xAxis);
-
-		barsvg.append("g")
-		  .call(yAxis);
-
-		return barsvg.node();
-
+		
 	})
 	.fail(function() {
 		// console.log("error");
@@ -340,7 +358,7 @@ function filterData() {
 		// console.log("complete");
 	});
 	
-
+	// ---------- Plot To Time-Series ---------------
 
 	var formDataLineGraph = new FormData();
 
@@ -350,11 +368,14 @@ function filterData() {
         	+ 'count(primary_type) as offence',
         	"$group" : "date",
         	"$where" : "date >'" + startDate + "'"
-        	+ " AND date <'" + endDate + "'",
+        	+ " AND date <'" + endDate + "'"
+        	+ " AND latitude IS NOT NULL",
         	"arrest" : arrest,
         	"domestic" : domestic,
 			"primary_type" : offence,
-        	"$order" : "date ASC"};
+        	"$order" : "date ASC",
+        	"$limit" : 200000,
+        	"$$app_token" : app_token};
 
         if (offence == "All") {
 		  //  block of code to be executed if condition1 is true
@@ -373,152 +394,125 @@ function filterData() {
 		dataType: "json",
         data: formDataLineGraph,
 	}).done(function(lineGraphData) {
-		console.log(lineGraphData);
+		// console.log(lineGraphData);
+		var data = lineGraphData.features;
 
-		// var trace = {
-		// 	x:
-		// 	y:
-		// 	type: 'scatter'
-		// }
+		var x = [];
+		var y = [];
 
-		// var data = [trace]
+		var selectorOptions = {
+		    buttons: [{
+		        step: 'month',
+		        stepmode: 'backward',
+		        count: 1,
+		        label: '1m'
+		    }, {
+		        step: 'month',
+		        stepmode: 'backward',
+		        count: 6,
+		        label: '6m'
+		    }, {
+		        step: 'year',
+		        stepmode: 'todate',
+		        count: 1,
+		        label: 'YTD'
+		    }, {
+		        step: 'year',
+		        stepmode: 'backward',
+		        count: 1,
+		        label: '1y'
+		    }, {
+		        step: 'all',
+		    }],
+		};
+		
 
-		//set the dimensions and margins of the graph
-// 		var margin = {top: 10, right: 30, bottom: 30, left: 60},
-// 	    width = 460 - margin.left - margin.right,
-// 	    height = 400 - margin.top - margin.bottom;
+		var layout = {
+			title: "Crime Time-Series",
+			// autosize: false,
+			xaxis: {
+            rangeselector: selectorOptions,
+            rangeslider: {}
+        	},
+        	yaxis: {
+        		fixedrange: true,
+        		title: "Crime Count"
+        	}
+		};
 
-// 		// append the svg object to the body of the page
-// 		var svg = d3.select("#lineGraph")
-// 		  .append("svg")
-// 		    .attr("width", width + margin.left + margin.right)
-// 		    .attr("height", height + margin.top + margin.bottom)
-// 		  .append("g")
-// 		    .attr("transform",
-// 		          "translate(" + margin.left + "," + margin.top + ")");
+		for(var i =0; i < data.length; i++){
+			y.push(data[i].properties.offence);
+			x.push(new Date(data[i].properties.date));
+	
+		};
+		
+		var barChart = [{
+				mode: "lines",
+				x:x,
+				y:y
+				}];
 
-// 		//Read the data
-// 		var data = lineGraphData.features;
+		Plotly.newPlot('graph2', barChart,layout);
 
-// d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
-
-//   // When reading the csv, I must format variables:
-//   function(d){
-//     return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
-//   },
-
-//   // Now I can use this dataset:
-//   function(data) {
-
-//     // Add X axis --> it is a date format
-//     var x = d3.scaleTime()
-//       .domain(d3.extent(data, function(d) { return d.date; }))
-//       .range([ 0, width ]);
-//     xAxis = svg.append("g")
-//       .attr("transform", "translate(0," + height + ")")
-//       .call(d3.axisBottom(x));
-
-//     // Add Y axis
-//     var y = d3.scaleLinear()
-//       .domain([0, d3.max(data, function(d) { return +d.value; })])
-//       .range([ height, 0 ]);
-//     yAxis = svg.append("g")
-//       .call(d3.axisLeft(y));
-
-//     // Add a clipPath: everything out of this area won't be drawn.
-//     var clip = svg.append("defs").append("svg:clipPath")
-//         .attr("id", "clip")
-//         .append("svg:rect")
-//         .attr("width", width )
-//         .attr("height", height )
-//         .attr("x", 0)
-//         .attr("y", 0);
-
-//     // Add brushing
-//     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-//         .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-//         .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
-
-//     // Create the line variable: where both the line and the brush take place
-//     var line = svg.append('g')
-//       .attr("clip-path", "url(#clip)")
-
-//     // Add the line
-//     line.append("path")
-//       .datum(data)
-//       .attr("class", "line")  // I add the class line to be able to modify this line later on.
-//       .attr("fill", "none")
-//       .attr("stroke", "steelblue")
-//       .attr("stroke-width", 1.5)
-//       .attr("d", d3.line()
-//         .x(function(d) { return x(d.date) })
-//         .y(function(d) { return y(d.value) })
-//         )
-
-//     // Add the brushing
-//     line
-//       .append("g")
-//         .attr("class", "brush")
-//         .call(brush);
-
-//     // A function that set idleTimeOut to null
-//     var idleTimeout
-//     function idled() { idleTimeout = null; }
-
-//     // A function that update the chart for given boundaries
-//     function updateChart() {
-
-//       // What are the selected boundaries?
-//       extent = d3.event.selection
-
-//       // If no selection, back to initial coordinate. Otherwise, update X axis domain
-//       if(!extent){
-//         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-//         x.domain([ 4,8])
-//       }else{
-//         x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-//         line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-//       }
-
-//       // Update axis and line position
-//       xAxis.transition().duration(1000).call(d3.axisBottom(x))
-//       line
-//           .select('.line')
-//           .transition()
-//           .duration(1000)
-//           .attr("d", d3.line()
-//             .x(function(d) { return x(d.date) })
-//             .y(function(d) { return y(d.value) })
-//           )
-//     }
-
-//     // If user double click, reinitialize the chart
-//     svg.on("dblclick",function(){
-//       x.domain(d3.extent(data, function(d) { return d.date; }))
-//       xAxis.transition().call(d3.axisBottom(x))
-//       line
-//         .select('.line')
-//         .transition()
-//         .attr("d", d3.line()
-//           .x(function(d) { return x(d.date) })
-//           .y(function(d) { return y(d.value) })
-//       )
-//     });
-
-// })
 	})
 	.fail(function() {
-		console.log("error");
+		// console.log("error");
 	})
 	.always(function() {
-		console.log("complete");
+		// console.log("complete");
 	});
 	
 
 
+// ---------- PLOT HEATMAP ---------------
+	var formHeatmap = new FormData();
 
+    var formHeatmap =  {
+        	"$where" : "date >'" + startDate + "'"
+        	+ " AND date <'" + endDate + "'"
+        	+ " AND latitude IS NOT NULL",
+        	"arrest" : arrest,
+        	"domestic" : domestic,
+			"primary_type" : offence,
+			"$limit": 200000,
+        	"$$app_token" : app_token};
 
+        if (offence == "All") {
+		  //  block of code to be executed if condition1 is true
+		  delete formHeatmap.primary_type;
+		}if (arrest == "All"){
+			delete formHeatmap.arrest;
+		}if (domestic == "All"){
+			delete formHeatmap.domestic;
+		}else{
 
+		};
+
+	$.ajax({
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
+		method: "GET",
+		dataType: "json",
+        data: formHeatmap,
+	}).done(function(heatmap) {
+		// console.log(heatmap);
+		
+		var locations = heatmap.features.map(function(points){
+
+			var location = points.geometry.coordinates.reverse();
+			location.push(0.5);
+			return location;
+			console.log(location);
+		});
+
+		var heat = new L.heatLayer(locations, {radius: 10}).addTo(map);
+
+	})
+	.fail(function() {
+		// console.log("error");
+	})
+	.always(function() {
+		// console.log("complete");
+	});
 
 
 
