@@ -131,21 +131,15 @@
                 </div>
             </nav>
             <div class="row" style="margin-left: 30px ; margin-top: 15px">
-                <div class="col-lg-6" id="map" style="height: 600px; width: 500px">
-                    <input onclick="toggleDisplay()" class="leaflet-control btn btn-sm" type="button" value="Show/Hide Choropleth" style="background-color: white; background-size: 130px 30px; width: 130px; height: 30px; margin-left: 40px; margin-top: 12px">
-
-                    <input onclick="toggleDisplay()" class="leaflet-control btn btn-sm" type="button" value="Show/Hide Choropleth" style="background-color: white; background-size: 130px 30px; width: 130px; height: 30px; margin-left: 40px; margin-top: 12px">
-
-                    <input onclick="toggleDisplay()" class="leaflet-control btn btn-sm" type="button" value="Show/Hide Choropleth" style="background-color: white; background-size: 130px 30px; width: 130px; height: 30px; margin-left: 40px; margin-top: 12px">
-                </div>
+                <div class="col-lg-6" id="map" style="height: 600px; width: 500px"></div>
 
                 <div class="col-lg-6 col-lg-offset-2" style="height: 500px; width: 500px">
                     
                     <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph1" style=" margin-top: 10px; width: 500px">Crime Count by Type</button>
                     <div id="graph1" class="collapse" style="height: 500px; width: 500px"></div>
 
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph1" style=" margin-top: 10px; width: 500px">Crime Count per Ward</button>
-                    <div id="graph1" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph3" style=" margin-top: 10px; width: 500px">Crime Count per Community Area</button>
+                    <div id="graph3" class="collapse" style="height: 500px; width: 500px"></div>
 
                     <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph2" style="margin-top: 10px; width: 500px">Time Series</button>
                     <div id="graph2" class="collapse" style="height: 500px; width: 500px"></div>
@@ -154,7 +148,7 @@
                     <div id="graph4" class="collapse" style="height: 500px; width: 500px"></div>
 
                     <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph3" style="margin-top: 10px; width: 500px">Boxplot</button>
-                    <div id="graph3" class="collapse" style="height: 500px; width: 500px"></div>
+                    <div id="graph5" class="collapse" style="height: 500px; width: 500px"></div>
                 </div>
             </div>
         </div>
@@ -171,20 +165,6 @@
             });
         });
     </script>
-    <!-- <script type="text/javascript">
-        $(document).on('click', '.panel-heading span.clickable', function(e){
-    var $this = $(this);
-    if(!$this.hasClass('panel-collapsed')) {
-        $this.parents('.panel').find('.panel-body').slideUp();
-        $this.addClass('panel-collapsed');
-        $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
-    } else {
-        $this.parents('.panel').find('.panel-body').slideDown();
-        $this.removeClass('panel-collapsed');
-        $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
-    }
-    });
-    </script> -->
 </body>
 
 </html>

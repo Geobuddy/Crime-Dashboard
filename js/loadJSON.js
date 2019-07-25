@@ -110,17 +110,17 @@ function filterData() {
 	var formData = new FormData();
 
     var formData =  {
-        	"$select" : "ward"
+        	"$select" : "community_area"
         	+ ", "
         	+ 'count(primary_type) as offence',
-        	"$group" : "ward",
+        	"$group" : "community_area",
         	"$where" : "date >='" + startDate + "'"
         	+ " AND date <='" + endDate + "'"
         	+ " AND latitude IS NOT NULL", 
         	"arrest" : arrest,
         	"domestic" : domestic,
 			"primary_type" : offence,
-        	"$order" : "ward",
+        	"$order" : "community_area",
         	"$limit" : 200000,
         	"$$app_token": app_token};
 
@@ -143,111 +143,152 @@ function filterData() {
 	}).done(function(crime) {
 			// console.log(crime);
 			$.ajax({
-				url: 'https://data.cityofchicago.org/resource/k9yb-bpqx.geojson',
+				url: 'https://raw.githubusercontent.com/RandomFractals/ChicagoCrimes/master/data/chicago-community-areas.geojson',
 				type: 'GET',
 				dataType: 'json',
 				data:{
 				},
 			}).done(function(boundaries) {
 
-				//Define map projection/Define path generator
-				var transform = d3.geoTransform({point: projectPoint}),
-				path = d3.geoPath().projection(transform);
+				var myCrime = crime.features;
+				var myBoundary = boundaries.features;
 
-								 
-				//Define quantize scale to sort data values into buckets of color
-				var color = d3.scaleQuantile()
-									.range(["rgb(237,248,233)","rgb(186,228,179)","rgb(116,196,118)","rgb(49,163,84)","rgb(0,109,44)"]);
-									//Colors taken from colorbrewer.js, included in the D3 download
+				for(var i =0; i < myCrime.length; i++){
+					var dataState = myCrime[i].properties.community_area;
+					var dataValue = myCrime[i].properties.offence;
 
-				// Redraw updated SVG layer - https://stackoverflow.com/questions/34088550/d3-how-to-refresh-a-chart-with-new-data/34184333
-				d3.select("svg").remove(); 
-
-				//Create SVG element
-				var svg = d3.select(map.getPanes().overlayPane).append("svg");
-      				var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-
-      				// https://stackoverflow.com/questions/16348717/how-to-get-maximum-value-from-an-array-of-objects-to-use-in-d3-scale-linear-do
-					color.domain([
-						d3.min(crime.features, function(d) { return +d.properties.offence; }),
-						d3.max(crime.features, function(d) { return +d.properties.offence; })
-					]);
-
-
-					var myCrime = crime.features;
-					var myBoundary = boundaries.features;
-
-					for(var i =0; i < myCrime.length; i++){
-						var dataState = myCrime[i].properties.ward;
-						var dataValue = myCrime[i].properties.offence;
-
-						for(var j =0; j < myBoundary.length; j++){
-							var jsonState = myBoundary[j].properties.ward;
-							if(dataState == jsonState){
-								myBoundary[j].properties.value = dataValue;
-								// console.log(jsonState);
-								break;
-							}
+					for(var j =0; j < myBoundary.length; j++){
+						var jsonState = myBoundary[j].properties.area_numbe;
+						if(dataState == jsonState){
+							myBoundary[j].properties.value = dataValue;
+							break;
 						}
 					}
+				}
 
-				var feature = g.selectAll("path")	
-					.data(myBoundary)
-					.enter()
-					.append("path");
-					console.log(myBoundary);
+// ------------ CHOROPLETH LAYER --------------------// adapted from:view-source:https://leafletjs.com/examples/choropleth/example.html
 
-				map.on("zoom", reset);
-				reset ();
+				// control that shows state info on hover
+				var info = L.control();
 
-				function reset() {
-					// body...
-					bounds = path.bounds(boundaries);
-					var topLeft = bounds[0],
-						bottomRight = bounds[1];
-					svg .attr("width", bottomRight[0] - topLeft[0])
-						.attr("height", bottomRight[1] - topLeft[1])
-						.style("left", topLeft[0] + "px")
-						.style("top", topLeft[1] + "px");
-					g .attr("transform", "translate(" + -topLeft[0] + "," 
-					                                  + -topLeft[1] + ")");
+				info.onAdd = function (map) {
+					this._div = L.DomUtil.create('div', 'info');
+					this.update();
+					return this._div;
+				};
 
-					feature.attr("d", path)
-					feature.attr("class", "svg1")
-					feature.style("stroke", "black")
-					feature.style("opacity", 0.6)
-					feature.style("fill", function(d) {
-						// console.log(d);
-					//Get data value
-						var value = d.properties.value;
-						
-						if (value) {
-							//If value exists…
-							return color(value);
-						} else {
-							//If value is undefined…
-							return "#c8c8c8";
-						}
+				info.update = function (props) {
+					this._div.innerHTML = '<h5>Chicago Crime Count</h5>' +  (props ?
+						'<b>'+ 'Community area: ' + props.area_numbe + '</b><br />' + props.value + ' Offence (s)'
+						: 'Hover over a state');
+				};
+
+				info.addTo(map);
+
+
+				// get color depending on population density value
+				function getColor(d) {
+					return d > 1000 ? '#800026' :
+							d > 500  ? '#BD0026' :
+							d > 200  ? '#E31A1C' :
+							d > 100  ? '#FC4E2A' :
+							d > 50   ? '#FD8D3C' :
+							d > 20   ? '#FEB24C' :
+							d > 10   ? '#FED976' :
+										'#FFEDA0';
+				}
+
+				function style(feature) {
+					return {
+						weight: 2,
+						opacity: 1,
+						color: 'white',
+						dashArray: '2',
+						fillOpacity: 0.7,
+						fillColor: getColor(feature.properties.value)
+					};
+				}
+
+				function highlightFeature(e) {
+					var layer = e.target;
+
+					layer.setStyle({
+						weight: 3,
+						color: '#666',
+						dashArray: '',
+						fillOpacity: 0.7
+					});
+
+					if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+						layer.bringToFront();
+					}
+
+					info.update(layer.feature.properties);
+				}
+
+				var geojson;
+
+				function resetHighlight(e) {
+					geojson.resetStyle(e.target);
+					info.update();
+				}
+
+				function zoomToFeature(e) {
+					map.fitBounds(e.target.getBounds());
+				}
+
+				function onEachFeature(feature, layer) {
+					layer.on({
+						mouseover: highlightFeature,
+						mouseout: resetHighlight,
+						click: zoomToFeature
 					});
 				}
 
-				function projectPoint(x, y) {
-					// body...
-					var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-					this.stream.point(point.x, point.y);
-				}
+				geojson = L.geoJson(myBoundary, {
+					style: style,
+					onEachFeature: onEachFeature
+				}).addTo(map);
+
+				var legend = L.control({position: 'bottomright'});
+
+				legend.onAdd = function (map) {
+
+					var div = L.DomUtil.create('div', 'info legend'),
+						grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+						labels = [],
+						from, to;
+
+					for (var i = 0; i < grades.length; i++) {
+						from = grades[i];
+						to = grades[i + 1];
+
+						labels.push(
+							'<i style="background:' + getColor(from + 1) + '"></i> ' +
+							from + (to ? '&ndash;' + to : '+'));
+					}
+
+					div.innerHTML = labels.join('<br>');
+					return div;
+				};
+
+				legend.addTo(map);
 
 
-				// ---------- Plot Histogram for Crime count per Ward ---------------
+
+				// ---------- Plot Histogram for Crime count per Community ---------------
 
 				var x = [];
+				var xHist = [];
+				var yHist = []
 
 				for(var i =0; i < myCrime.length; i++){
 					x.push(myCrime[i].properties.offence);
-			
+					xHist.push(+myCrime[i].properties.community_area);
+					yHist.push(myCrime[i].properties.offence);
 				}
 				
-				var barChart = [{
+				var histogram = [{
 						x:x,
 						type: "histogram",
 						histfunc: "count",
@@ -266,11 +307,47 @@ function filterData() {
 
 				
 
-				Plotly.newPlot('graph4', barChart,layout,{showSendToCloud: true});
+				Plotly.newPlot('graph4', histogram,layout,{showSendToCloud: true});
+
+				// ---------- Plot Crime count per Community Area ---------------
+				
+				// xHist = xHist.map(String);
+				console.log(xHist);
+
+				var barChart = [{
+						x:xHist,
+						y:yHist,
+						type: "bar",
+						transforms: [{
+					    type: 'sort',
+					    target: 'y',
+					    order: 'descending'
+					 	}]
+						}];
+
+				var layout = {
+					title: "Crime Count per Community Area",
+					yaxis: {
+						title: "Crime Count"
+					},
+					xaxis: {
+						title: "Community Area",
+						type:'category'
+					},
+					margins: {
+					l:"220px"	
+					}
+
+				};
+
+				
+
+				Plotly.newPlot('graph3', barChart,layout);
 
 				});
-
 	});
+
+
 
 	// ------------------- QUERY TO PLOT CRIME COUNT PER TYPE ---------------------
 
@@ -447,7 +524,7 @@ function filterData() {
 		};
 		
 		var barChart = [{
-				mode: "lines",
+				mode: "category",
 				x:x,
 				y:y
 				}];

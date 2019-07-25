@@ -1,5 +1,5 @@
     // load the map
-var map = new L.map('map', {center: [41.85, -87.73], zoom: 10}, {doubleClickZoom: false});
+var map = new L.map('map', {center: [41.85, -87.73], zoom: 10,renderer: L.svg()}, {doubleClickZoom: false});
 
 
 // load the tiles
