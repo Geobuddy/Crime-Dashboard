@@ -21,27 +21,18 @@ var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all
 	maxZoom: 19
 }).addTo(map);
 
+
 var baseLayers = {
-				"OSM": osm,
-				"Mapbox": mapbox,
-				"CartoDB": CartoDB_DarkMatter
-				};	
+"OSM": osm,
+"Mapbox": mapbox,
+"CartoDB": CartoDB_DarkMatter
+};  
+
+// var overlays ={
+  // "Choropleth" : geojson
+  // "Heatmap" :
+  // "Dot Map" :
+// }
 
 
 L.control.layers(baseLayers).addTo(map);
-
-
-// https://stackoverflow.com/questions/40108280/how-to-hide-svg-elements-with-javascript-on-a-button-click
-// https://stackoverflow.com/questions/50375766/hide-and-show-svg-element-with-transition
-function toggleDisplay() {
-  var rects = document.getElementsByClassName('svg1');
-  var i;
-  
-  for (i = 0; i < rects.length; i++) {
-    if (rects[i].style.display == 'none') {
-      rects[i].style.display = 'block';
-    } else {
-      rects[i].style.display = 'none';
-    }
-  }
-}
