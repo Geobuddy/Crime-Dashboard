@@ -5,7 +5,7 @@ $('.form-control').change(function() {
 	var startDate= $("#startDate").val();
 	var endDate= $("#endDate").val();
 
-// ---------- PLOT HEATMAP ---------------
+// ---------- Set request parameters ---------------
 	var formHeatmap = new FormData();
 
     var formHeatmap =  {
@@ -34,23 +34,49 @@ $('.form-control').change(function() {
 		method: "GET",
 		dataType: "json",
         data: formHeatmap,
-	}).done(function(heatmap) {
+	}).done(function(data) {
+		clusterLayer(data);
+		heatLayer(data);
+	});
+});
+	
+	// ---------- PLOT HEATMAP ---------------
 
-		var locations = heatmap.features.map(function(points){
+// Adapted from: https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html
+function heatLayer(data) {
+	$(".leaflet-heatmap-layer").hide();
+	var locations = data.features.map(function(points){
 
 			var location = points.geometry.coordinates.reverse();
-			location.push(0.5);
+			// location.push(0.9);
 			return location;
 		});
 
-		heat = new L.heatLayer(locations, {radius: 10}).addTo(map);
+	// Draw heatmap
+	 heat = new L.heatLayer(locations)
+		
 
-	})
-	.fail(function() {
-		// console.log("error");
-	})
-	.always(function() {
-		// console.log("complete");
-	});
+	// Set heatmap parameters
+	heat.setOptions({
+        radius: 9,
+        max: 1.0,
+        minOpacity: 0.7,
+        scaleRadius: true,
+        useLocalExtrema: true,
+    });
+    // render map with the new options
 
-});
+    if(heat){
+    	$(".leaflet-heatmap-layer").remove(); //Destroy previous canvas
+    }
+    else{
+
+    }
+    map.addLayer(heat);
+};
+
+// Hide and Show Heatmap
+$("#Btn2").click(function() {
+    	$(".leaflet-heatmap-layer").toggle();
+    });
+

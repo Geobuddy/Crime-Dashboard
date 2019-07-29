@@ -24,7 +24,7 @@ $('.form-control').change(function() {
         	"domestic" : domestic,
 			"primary_type" : offence,
         	"$order" : "offence DESC",
-        	"$limit" : 200000,
+        	"$limit" : 100000,
         	"$$app_token": app_token};
 
         if (offence == "All") {
@@ -110,7 +110,7 @@ $('.form-control').change(function() {
         	"domestic" : domestic,
 			"primary_type" : offence,
         	"$order" : "date ASC",
-        	"$limit" : 200000,
+        	"$limit" : 100000,
         	"$$app_token" : app_token};
 
         if (offence == "All") {
@@ -140,8 +140,8 @@ $('.form-control').change(function() {
 		    buttons: [{
 		        step: 'month',
 		        stepmode: 'backward',
-		        count: 1,
-		        label: '1m'
+		        count: 3,
+		        label: '3m'
 		    }, {
 		        step: 'month',
 		        stepmode: 'backward',

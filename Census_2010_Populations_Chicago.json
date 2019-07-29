@@ -1,0 +1,387 @@
+[
+ {
+   "Community_Area_Num": 1,
+   "Community_Area": "Rogers Park",
+   "Population_2010": "54991"
+ },
+ {
+   "Community_Area_Num": 2,
+   "Community_Area": "West Ridge",
+   "Population_2010": "71942"
+ },
+ {
+   "Community_Area_Num": 3,
+   "Community_Area": "Uptown",
+   "Population_2010": "56362"
+ },
+ {
+   "Community_Area_Num": 4,
+   "Community_Area": "Lincoln Square",
+   "Population_2010": "39493"
+ },
+ {
+   "Community_Area_Num": 5,
+   "Community_Area": "North Center",
+   "Population_2010": "31867"
+ },
+ {
+   "Community_Area_Num": 6,
+   "Community_Area": "Lake View",
+   "Population_2010": "94368"
+ },
+ {
+   "Community_Area_Num": 7,
+   "Community_Area": "Lincoln Park",
+   "Population_2010": "64116"
+ },
+ {
+   "Community_Area_Num": 8,
+   "Community_Area": "Near North Side",
+   "Population_2010": "80484"
+ },
+ {
+   "Community_Area_Num": 9,
+   "Community_Area": "Edison Park",
+   "Population_2010": "11187"
+ },
+ {
+   "Community_Area_Num": 10,
+   "Community_Area": "Norwood Park",
+   "Population_2010": "37023"
+ },
+ {
+   "Community_Area_Num": 11,
+   "Community_Area": "Jefferson Park",
+   "Population_2010": "25448"
+ },
+ {
+   "Community_Area_Num": 12,
+   "Community_Area": "Forest Glen",
+   "Population_2010": "18508"
+ },
+ {
+   "Community_Area_Num": 13,
+   "Community_Area": "North Park",
+   "Population_2010": "17931"
+ },
+ {
+   "Community_Area_Num": 14,
+   "Community_Area": "Albany Park",
+   "Population_2010": "51542"
+ },
+ {
+   "Community_Area_Num": 15,
+   "Community_Area": "Portage Park",
+   "Population_2010": "64124"
+ },
+ {
+   "Community_Area_Num": 16,
+   "Community_Area": "Irving Park",
+   "Population_2010": "53359"
+ },
+ {
+   "Community_Area_Num": 17,
+   "Community_Area": "Dunning",
+   "Population_2010": "41932"
+ },
+ {
+   "Community_Area_Num": 18,
+   "Community_Area": "Montclare",
+   "Population_2010": "13426"
+ },
+ {
+   "Community_Area_Num": 19,
+   "Community_Area": "Belmont Cragin",
+   "Population_2010": "78743"
+ },
+ {
+   "Community_Area_Num": 20,
+   "Community_Area": "Hermosa",
+   "Population_2010": "25010"
+ },
+ {
+   "Community_Area_Num": 21,
+   "Community_Area": "Avondale",
+   "Population_2010": "39262"
+ },
+ {
+   "Community_Area_Num": 22,
+   "Community_Area": "Logan Square",
+   "Population_2010": "73595"
+ },
+ {
+   "Community_Area_Num": 23,
+   "Community_Area": "Humboldt Park",
+   "Population_2010": "56323"
+ },
+ {
+   "Community_Area_Num": 24,
+   "Community_Area": "West Town",
+   "Population_2010": "81432"
+ },
+ {
+   "Community_Area_Num": 25,
+   "Community_Area": "Austin",
+   "Population_2010": "98514"
+ },
+ {
+   "Community_Area_Num": 26,
+   "Community_Area": "West Garfield Park",
+   "Population_2010": "18001"
+ },
+ {
+   "Community_Area_Num": 27,
+   "Community_Area": "East Garfield Park",
+   "Population_2010": "20567"
+ },
+ {
+   "Community_Area_Num": 28,
+   "Community_Area": "Near West Side",
+   "Population_2010": "54881"
+ },
+ {
+   "Community_Area_Num": 29,
+   "Community_Area": "North Lawndale",
+   "Population_2010": "35912"
+ },
+ {
+   "Community_Area_Num": 30,
+   "Community_Area": "South Lawndale",
+   "Population_2010": "79288"
+ },
+ {
+   "Community_Area_Num": 31,
+   "Community_Area": "Lower West Side",
+   "Population_2010": "35769"
+ },
+ {
+   "Community_Area_Num": 32,
+   "Community_Area": "Loop",
+   "Population_2010": "29283"
+ },
+ {
+   "Community_Area_Num": 33,
+   "Community_Area": "Near South Side",
+   "Population_2010": "21390"
+ },
+ {
+   "Community_Area_Num": 34,
+   "Community_Area": "Armour Square",
+   "Population_2010": "13391"
+ },
+ {
+   "Community_Area_Num": 35,
+   "Community_Area": "Douglas",
+   "Population_2010": "18238"
+ },
+ {
+   "Community_Area_Num": 36,
+   "Community_Area": "Oakland",
+   "Population_2010": "5918"
+ },
+ {
+   "Community_Area_Num": 37,
+   "Community_Area": "Fuller Park",
+   "Population_2010": "2876"
+ },
+ {
+   "Community_Area_Num": 38,
+   "Community_Area": "Grand Boulevard",
+   "Population_2010": "21929"
+ },
+ {
+   "Community_Area_Num": 39,
+   "Community_Area": "Kenwood",
+   "Population_2010": "17841"
+ },
+ {
+   "Community_Area_Num": 40,
+   "Community_Area": "Washington Park",
+   "Population_2010": "11717"
+ },
+ {
+   "Community_Area_Num": 41,
+   "Community_Area": "Hyde Park",
+   "Population_2010": "25681"
+ },
+ {
+   "Community_Area_Num": 42,
+   "Community_Area": "Woodlawn",
+   "Population_2010": "25983"
+ },
+ {
+   "Community_Area_Num": 43,
+   "Community_Area": "South Shore",
+   "Population_2010": "49767"
+ },
+ {
+   "Community_Area_Num": 44,
+   "Community_Area": "Chatham",
+   "Population_2010": "31028"
+ },
+ {
+   "Community_Area_Num": 45,
+   "Community_Area": "Avalon Park",
+   "Population_2010": "10185"
+ },
+ {
+   "Community_Area_Num": 46,
+   "Community_Area": "South Chicago",
+   "Population_2010": "31198"
+ },
+ {
+   "Community_Area_Num": 47,
+   "Community_Area": "Burnside",
+   "Population_2010": "2916"
+ },
+ {
+   "Community_Area_Num": 48,
+   "Community_Area": "Calumet Heights",
+   "Population_2010": "13812"
+ },
+ {
+   "Community_Area_Num": 49,
+   "Community_Area": "Roseland",
+   "Population_2010": "44619"
+ },
+ {
+   "Community_Area_Num": 50,
+   "Community_Area": "Pullman",
+   "Population_2010": "7325"
+ },
+ {
+   "Community_Area_Num": 51,
+   "Community_Area": "South Deering",
+   "Population_2010": "15109"
+ },
+ {
+   "Community_Area_Num": 52,
+   "Community_Area": "East Side",
+   "Population_2010": "23042"
+ },
+ {
+   "Community_Area_Num": 53,
+   "Community_Area": "West Pullman",
+   "Population_2010": "29651"
+ },
+ {
+   "Community_Area_Num": 54,
+   "Community_Area": "Riverdale",
+   "Population_2010": "6482"
+ },
+ {
+   "Community_Area_Num": 55,
+   "Community_Area": "Hegewisch",
+   "Population_2010": "9426"
+ },
+ {
+   "Community_Area_Num": 56,
+   "Community_Area": "Garfield Ridge",
+   "Population_2010": "34513"
+ },
+ {
+   "Community_Area_Num": 57,
+   "Community_Area": "Archer Heights",
+   "Population_2010": "13393"
+ },
+ {
+   "Community_Area_Num": 58,
+   "Community_Area": "Brighton Park",
+   "Population_2010": "45368"
+ },
+ {
+   "Community_Area_Num": 59,
+   "Community_Area": "McKinley Park",
+   "Population_2010": "15612"
+ },
+ {
+   "Community_Area_Num": 60,
+   "Community_Area": "Bridgeport",
+   "Population_2010": "31977"
+ },
+ {
+   "Community_Area_Num": 61,
+   "Community_Area": "New City",
+   "Population_2010": "44377"
+ },
+ {
+   "Community_Area_Num": 62,
+   "Community_Area": "West Elsdon",
+   "Population_2010": "18109"
+ },
+ {
+   "Community_Area_Num": 63,
+   "Community_Area": "Gage Park",
+   "Population_2010": "39894"
+ },
+ {
+   "Community_Area_Num": 64,
+   "Community_Area": "Clearing",
+   "Population_2010": "23139"
+ },
+ {
+   "Community_Area_Num": 65,
+   "Community_Area": "West Lawn",
+   "Population_2010": "33355"
+ },
+ {
+   "Community_Area_Num": 66,
+   "Community_Area": "Chicago Lawn",
+   "Population_2010": "55628"
+ },
+ {
+   "Community_Area_Num": 67,
+   "Community_Area": "West Englewood",
+   "Population_2010": "35505"
+ },
+ {
+   "Community_Area_Num": 68,
+   "Community_Area": "Englewood",
+   "Population_2010": "30654"
+ },
+ {
+   "Community_Area_Num": 69,
+   "Community_Area": "Greater Grand Crossing",
+   "Population_2010": "32602"
+ },
+ {
+   "Community_Area_Num": 70,
+   "Community_Area": "Ashburn",
+   "Population_2010": "41081"
+ },
+ {
+   "Community_Area_Num": 71,
+   "Community_Area": "Auburn Gresham",
+   "Population_2010": "48743"
+ },
+ {
+   "Community_Area_Num": 72,
+   "Community_Area": "Beverly",
+   "Population_2010": "20034"
+ },
+ {
+   "Community_Area_Num": 73,
+   "Community_Area": "Washington Heights",
+   "Population_2010": "26493"
+ },
+ {
+   "Community_Area_Num": 74,
+   "Community_Area": "Mount Greenwood",
+   "Population_2010": "19093"
+ },
+ {
+   "Community_Area_Num": 75,
+   "Community_Area": "Morgan Park",
+   "Population_2010": "22544"
+ },
+ {
+   "Community_Area_Num": 76,
+   "Community_Area": "O'Hare",
+   "Population_2010": "12756"
+ },
+ {
+   "Community_Area_Num": 77,
+   "Community_Area": "Edgewater",
+   "Population_2010": "56521"
+ }
+]
