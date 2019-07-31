@@ -98,9 +98,6 @@
                                 <a class="nav-link active py-0" href="index.html">MAIN</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link py-0" href="stats.html">ANALYSIS</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link py-0" href="data.html">DATA</a>
                             </li>
                             <li class="nav-item">
@@ -110,32 +107,60 @@
                     </div>
                 </div>
             </nav>
-            <div class="row" style="margin-left: 30px ; margin-top: 15px">
-            	<div cass="col-lg-6">
-			        <div id="map" ></div>
-			        <div id="button-wrapper">
-			            <button id="Btn1" class="button">Show/Hide Choropleth Map</button>
-			            <button id="Btn2" class="button">Show/Hide Heatmap Map</button>
-			            <button id="Btn3" class="button">Show/Hide Cluster Map</button>
-			        </div> 
-				</div>
+            <div class="row" style="margin-left: 5px">
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <div class="bg" style="margin-left: 40px">
+                        <input id="Cbox1" type="checkbox" >
+                        <label for="Cbox1">Choropleth Map</label>
+                        <input id="Cbox2" type="checkbox" style="margin-left: 5px">
+                        <label for="Cbox2">Heatmap Map</label>
+                        <input id="Cbox3" type="checkbox" style="margin-left: 5px">
+                        <label for="Cbox3">Cluster Map</label>
+                    </div>
+                    <div id="map" ></div>
+                </div>
+                <div class="col-sm-7 col-md-7 col-lg-7">
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph1">Crime Count by Type</button>
+                    <div id="graph1" class="collapse graph"></div>
 
-                <div class="col-lg-6 col-lg-offset-2" >
-                    
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph1" style=" margin-top: 10px; width: 500px">Crime Count by Type</button>
-                    <div id="graph1" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph2" style="margin-top: 10px">Time Series</button>
+                    <div id="graph2" class="collapse graph"></div>
 
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph3" style=" margin-top: 10px; width: 500px">Crime Count per Community Area</button>
-                    <div id="graph3" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph3" style=" margin-top: 10px">Crime Count per Community Area</button>
+                    <div id="graph3" class="collapse graph"></div>
 
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph2" style="margin-top: 10px; width: 500px">Time Series</button>
-                    <div id="graph2" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph4" style="margin-top: 10px">Histogram</button>
+                    <div id="graph4" class="collapse graph"></div>
 
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph4" style="margin-top: 10px; width: 500px">Histogram</button>
-                    <div id="graph4" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph5" style="margin-top: 10px">Boxplot</button>
+                    <div id="graph5" class="collapse graph"></div>
 
-                    <button type="button" class="btn btn-sm btn-info collapsed" data-toggle="collapse" data-target="#graph3" style="margin-top: 10px; width: 500px">Boxplot</button>
-                    <div id="graph5" class="collapse" style="height: 500px; width: 500px"></div>
+                    <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph6" style="margin-top: 10px">Stats Table</button>
+                    <div id="graph6" class="collapse graph">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Crime Type</th>
+                                <th>Min</th>
+                                <th>Q1</th>
+                                <th>Mean Type</th>
+                                <th>Q3</th>
+                                <th>Max</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>John</td>
+                                <td>Doe</td>
+                                <td>.com</td>
+                                <td>Doe</td>
+                                <td>.com</td>
+                                <td>Doe</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,8 +170,6 @@
     <script src="js/leaflet.js"></script>
     <script src="js/leaflet-heat.js"></script>
     <script src="js/fillDropdowns.js"></script>
-    <script src="js/heatmapLayer.js"></script>
-    <script src="js/clusterLayer.js"></script>
     <script src="js/choroplethLayer.js"></script>
     <script src="js/graphs.js"></script>
     <script type="text/javascript">

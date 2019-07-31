@@ -1,5 +1,5 @@
     // load the map
-var map = new L.map('map', {layer:"mapbox", center: [41.85, -87.73], zoom: 10}, {doubleClickZoom: false});
+var map = new L.map('map', {layer:"mapbox", center: [41.85, -87.66], zoom: 10}, {doubleClickZoom: false});
 
 
 // load the tiles
@@ -22,18 +22,11 @@ attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</
 id: 'mapbox.streets'
 }).addTo(map);
 
-
 var baseLayers = {
-"OSM": osm,
-"CartoDB": CartoDB_DarkMatter,
-"Mapbox": mapbox,
-};  
+	"OSM": osm,
+	"CartoDB": CartoDB_DarkMatter,
+	"Mapbox": mapbox,
+	};  
 
-// var overlays ={
-  // "Choropleth" : geojson
-  // "Heatmap" :
-  // "Dot Map" :
-// }
+	L.control.layers(baseLayers).addTo(map);	
 
-
-L.control.layers(baseLayers).addTo(map);

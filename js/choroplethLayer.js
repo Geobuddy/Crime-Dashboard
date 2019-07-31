@@ -45,7 +45,7 @@ $(document).ready(function() {
 			dataType: "json",
 	        data: formData,
 		}).done(function (crime) {
-				// console.log(crime);
+				graph2(crime);
 				$.ajax({
 					url: 'https://raw.githubusercontent.com/RandomFractals/ChicagoCrimes/master/data/chicago-community-areas.geojson',
 					type: 'GET',
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
 		info.update = function (props) {
 			this._div.innerHTML = '<h5>Chicago Crime Count</h5>' +  (props ?
-				'<b>'+ 'Community Area: ' + props.area_numbe + '</b><br />' + props.value + ' Offence (s)'
+				'<b>'+ 'Community Area: ' + props.area_numbe + '</b><br />' + props.value + ' Offence (s)' + '<br /> Crime rate: ' + props.crime_rate.toFixed(3) + ' per 1000 pep'
 				: 'Hover over a state');
 		};
 
@@ -154,6 +154,7 @@ $(document).ready(function() {
 
 
 		function resetHighlight(e) {
+			// console.log(e);
 			geojson.resetStyle(e.target);
 			info.update();
 		}
@@ -170,13 +171,20 @@ $(document).ready(function() {
 			});
 		}
 
-
-		L.geoJson(getData(), {
+		var geojson;
+		
+		function getData(boundaries){
+			myBoundary = boundaries.features;
+			if(geojson){
+				$( "#Cbox3" ).prop( "checked", false );
+				map.removeLayer(geojson);
+			}
+			geojson = L.geoJson(myBoundary, {
 			style: style,
 			onEachFeature: onEachFeature
-		}).addTo(map);
+		})
+		map.addLayer(geojson);
 
-		function getData(){
 		}
 
 		var legend = L.control({position: 'bottomright'});
@@ -203,81 +211,150 @@ $(document).ready(function() {
 
 		legend.addTo(map);
 
-		//sHide and Show Choropleth map
-		$("#Btn1").click(function() {
-		    	$(".info.leaflet-control, .info.legend.leaflet-control").toggle();
+		// Hide and Show Choropleth
+		$("#Cbox1").click(function() {
+			if(this.checked){
+		    	// map.addLayer(geojson);
+		    	legend.addTo(map);
+		    	map.addLayer(info);
+			}else{
+				// map.removeLayer(geojson);
+				legend.onRemove(map);
+				map.removeLayer(info);
+			}    
 		    });
 
 
 
-
-		// ---------- Plot Histogram for Crime count per Community ---------------
-
-		var x = [];
-		var xHist = [];
-		var yHist = []
-
-		// for(var i =0; i < myCrime.length; i++){
-		// 	x.push(myCrime[i].properties.offence);
-		// 	xHist.push(+myCrime[i].properties.community_area);
-		// 	yHist.push(myCrime[i].properties.offence);
-		// }
-		
-		var histogram = [{
-				x:x,
-				type: "histogram",
-				histfunc: "count",
-				}];
-
-		var layout = {
-			title: "Crime Histogram",
-			yaxis: {
-				title: "Count"
-			},
-			bargap: 0.05,
-			xbins: {
-				size:20000
-			}
-		};
-
-		
-
-		Plotly.newPlot('graph4', histogram,layout,{showSendToCloud: true});
-
-		// ---------- Plot Crime count per Community Area ---------------
-		
-		// xHist = xHist.map(String);
-
-		var barChart = [{
-				x:xHist,
-				y:yHist,
-				type: "bar",
-				transforms: [{
-			    type: 'sort',
-			    target: 'y',
-			    order: 'descending'
-			 	}]
-				}];
-
-		var layout = {
-			title: "Crime Count per Community Area",
-			yaxis: {
-				title: "Crime Count"
-			},
-			xaxis: {
-				title: "Community Area",
-				type:'category'
-			},
-			margins: {
-			l:"220px"	
-			}
-
-		};
-
-		
-
-		Plotly.newPlot('graph3', barChart,layout);
-
 		// });
 // 	});
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+//============================================//========================//
+
+
+$('.form-control').change(function() {
+	var offence= $("#crimeType").val();
+	var arrest= $("#arrest").val();
+	var domestic= $("#domestic").val();
+	var startDate= $("#startDate").val();
+	var endDate= $("#endDate").val();
+
+// ---------- Set request parameters ---------------
+	var formHeatmap = new FormData();
+
+    var formHeatmap =  {
+        	"$where" : "date >'" + startDate + "'"
+        	+ " AND date <'" + endDate + "'"
+        	+ " AND latitude IS NOT NULL",
+        	"arrest" : arrest,
+        	"domestic" : domestic,
+			"primary_type" : offence,
+			"$limit": 200000,
+        	"$$app_token" : app_token};
+
+        if (offence == "All") {
+		  //  block of code to be executed if condition1 is true
+		  delete formHeatmap.primary_type;
+		}if (arrest == "All"){
+			delete formHeatmap.arrest;
+		}if (domestic == "All"){
+			delete formHeatmap.domestic;
+		}else{
+
+		};
+
+	$.ajax({
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
+		method: "GET",
+		dataType: "json",
+        data: formHeatmap,
+	}).done(function(data) {
+		clusterLayer(data);
+		heatLayer(data);
+	});
+});
+	
+	// ---------- PLOT HEATMAP ---------------
+
+// Adapted from: https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html
+function heatLayer(data) {
+	$( "#Cbox2" ).prop( "checked", false );
+	$(".leaflet-heatmap-layer").hide();
+	var locations = data.features.map(function(points){
+
+			var location = points.geometry.coordinates.reverse();
+			// location.push(0.9);
+			return location;
+		});
+
+	// Draw heatmap
+	 heat = new L.heatLayer(locations)
+		
+
+	// Set heatmap parameters
+	heat.setOptions({
+        radius: 9,
+        max: 1.0,
+        minOpacity: 0.7,
+        scaleRadius: true,
+        useLocalExtrema: true,
+    });
+
+};
+
+$("#Cbox2").click(function() {
+	if(this.checked){
+    	map.addLayer(heat);
+	}else{
+		map.removeLayer(heat);
+	}    
+    });
+
+	// ---------- PLOT CLUSTER MAP ---------------
+var clusters;
+
+function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
+	if(clusters){
+		$( "#Cbox3" ).prop( "checked", false );
+		map.removeLayer(clusters);
+	}
+	geoJsonLayer = new L.geoJson(data,{
+			pointToLayer: function(feature, latlng){
+				return L.marker(latlng).bindPopup(
+					"<b>Crime Type: </b>"+feature.properties.primary_type + 
+					"</br>" +
+					"<b>Description: </b>"+feature.properties.description  + 
+					"</br>" +
+					"<b>Block: </b>"+feature.properties.block  + 
+					"</br>" +
+					"<b>Date: </b>"+Date(feature.properties.date));
+			},
+        });
+
+	clusters = new L.markerClusterGroup({ disableClusteringAtZoom: 15 });
+
+    clusters.addLayer(geoJsonLayer);
+};
+
+		// Hide and Show Heatmap
+	$("#Cbox3").click(function() {
+		if(this.checked){
+	    	map.addLayer(clusters);
+		}else{
+			map.removeLayer(clusters);
+		}    
+	    });
+	
