@@ -368,19 +368,46 @@ box-shadow: 0 0 15px rgba(0,0,0,0.2);
 border-radius: 5px;
 }
 
-.legend {
+/*.legend {
 background-color: “black”;
 line-height: 25px;
 color: #555;
 width: auto;
+padding: 6px 8px;
+}*/
+
+.legend {
+color: #555;
+padding: 6px 8px;
+width: auto;
+font: 12px Arial, Helvetica, sans-serif;
+font-weight: bold;
+background-color: “black”;
+box-shadow: 0 0 15px rgba(0,0,0,0.2);
+border-radius: 5px;
 }
 
-.legend i {
-width: 18px;
-height: 18px;
-float: left;
-margin-right: 8px;
+.legend ul {
+list-style-type: none;
+padding: 0;
+margin: 0;
+clear: both;
+}
+
+.legend li {
+display: inline-block;
+width: 30px;
+height: 22px;
 opacity: 0.7;
+}
+
+.legend .min {
+float: left;
+padding-bottom: 5px;
+}
+
+.legend .max {
+float: right;
 }
 
 .info h4 {

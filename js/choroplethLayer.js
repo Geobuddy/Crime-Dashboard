@@ -106,7 +106,7 @@ $(document).ready(function() {
 
 		info.update = function (props) {
 			this._div.innerHTML = '<h5>Chicago Crime Count</h5>' +  (props ?
-				'<b>'+ 'Community Area: ' + props.area_numbe + '</b><br />' + props.value + ' Offence (s)' + '<br /> Crime rate: ' + props.crime_rate.toFixed(3) + ' per 1000 pep'
+				'<b>'+ 'Community Area: ' + props.area_numbe + '</b><br />' + props.value + ' Offence (s)' + '<br /> Crime rate: ' + props.crime_rate.toFixed(2) + ' per 1000 pep'
 				: 'Hover over a state');
 		};
 
@@ -115,13 +115,12 @@ $(document).ready(function() {
 
 		// get color depending on population density value
 		function getColor(d) {
-			return d > 1000 ? '#253494' :
-					d > 500  ? '#2c7fb8' :
-					d > 200  ? '#41b6c4' :
-					d > 100  ? '#7fcdbb' :
-					d > 50   ? '#c7e9b4' :
-								'#ffffcc';
-					
+			return d //> 1000 ? '#253494' :
+					// d > 500  ? '#2c7fb8' :
+					// d > 200  ? '#41b6c4' :
+					// d > 100  ? '#7fcdbb' :
+					// d > 50   ? '#c7e9b4' :
+					// 			'#ffffcc';
 		}
 
 		function style(feature) {
@@ -131,7 +130,6 @@ $(document).ready(function() {
 				color: 'white',
 				dashArray: '2',
 				fillOpacity: 0.7,
-				fillColor: getColor(feature.properties.value)
 			};
 		}
 
@@ -142,7 +140,7 @@ $(document).ready(function() {
 				weight: 3,
 				color: '#666',
 				dashArray: '',
-				fillOpacity: 0.7
+				fillOpacity: 0.9
 			});
 
 			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -154,7 +152,6 @@ $(document).ready(function() {
 
 
 		function resetHighlight(e) {
-			// console.log(e);
 			geojson.resetStyle(e.target);
 			info.update();
 		}
@@ -172,63 +169,68 @@ $(document).ready(function() {
 		}
 
 		var geojson;
-		
+
 		function getData(boundaries){
-			myBoundary = boundaries.features;
+			myBoundary = boundaries
+
+			// if(geojson){
+			// 	map.removeLayer(geojson);
+			// 	layerControl.removeLayer(geojson)
+			// }
+			// geojson = L.geoJson(myBoundary, {
+			// style: style,
+			// onEachFeature: onEachFeature
+			// })
+			// map.addLayer(geojson);
+			// layerControl.addOverlay(geojson, "Choropleth")
+			// map.addLayer(geojson);
+
 			if(geojson){
-				$( "#Cbox3" ).prop( "checked", false );
 				map.removeLayer(geojson);
+				layerControl.removeLayer(geojson)
 			}
-			geojson = L.geoJson(myBoundary, {
-			style: style,
-			onEachFeature: onEachFeature
-		})
-		map.addLayer(geojson);
+			geojson = L.choropleth(myBoundary, {
+				valueProperty: "value",
+				scale: ["#d1eeea","#a8dbd9","#85c4c9","#68abb8","#4f90a6","#3b738f","#2a5674"],
+				steps: 7,
+				mode: "q",
+				style: style,
+				onEachFeature: onEachFeature
+			})
+			map.addLayer(geojson);
+
+			layerControl.addOverlay(geojson, "Choropleth")
 
 		}
+
+
+
+
 
 		var legend = L.control({position: 'bottomright'});
 
 		legend.onAdd = function (map) {
 
 			var div = L.DomUtil.create('div', 'info legend'),
-				grades = [50, 100, 200, 500, 1000],
-				labels = [],
-				from, to;
+				grades = ["#d1eeea","#a8dbd9","#85c4c9","#68abb8","#4f90a6","#3b738f","#2a5674"] //[50, 100, 200, 500, 1000],
+				labels = []
 
-			for (var i = 0; i < grades.length; i++) {
-				from = grades[i];
-				to = grades[i + 1];
+		    /* Add min & max*/
+    div.innerHTML = '<div><h3 style="font-weight:bolder;font-size:larger;">Crime Rate</h3></div><div class="labels"><div class="min">Low</div> \
+  <div class="max">High</div></div>'
 
+			for (var i = 1; i < grades.length; i++) {
 				labels.push(
-					'<i style="background:' + getColor(from + 1) + '"></i> ' +
-					from + (to ? '&ndash;' + to : '+'));
+					'<li style="background-color:' + grades[i] + '"></li> ');
 			}
 
-			div.innerHTML = labels.join('<br>');
+			div.innerHTML += '<ul style="list-style-type:none;display:flex">' + labels.join('') + '</ul>';
 			return div;
 		};
 
 		legend.addTo(map);
 
-		// Hide and Show Choropleth
-		$("#Cbox1").click(function() {
-			if(this.checked){
-		    	// map.addLayer(geojson);
-		    	legend.addTo(map);
-		    	map.addLayer(info);
-			}else{
-				// map.removeLayer(geojson);
-				legend.onRemove(map);
-				map.removeLayer(info);
-			}    
-		    });
 
-
-
-		// });
-// 	});
-// });
 
 
 
@@ -243,7 +245,6 @@ $(document).ready(function() {
 
 
 //============================================//========================//
-
 
 $('.form-control').change(function() {
 	var offence= $("#crimeType").val();
@@ -290,11 +291,13 @@ $('.form-control').change(function() {
 	// ---------- PLOT HEATMAP ---------------
 
 // Adapted from: https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html
+var heat;
 function heatLayer(data) {
-	$( "#Cbox2" ).prop( "checked", false );
-	$(".leaflet-heatmap-layer").hide();
+	if(heat){
+		map.removeLayer(heat);
+		layerControl.removeLayer(heat);
+	}
 	var locations = data.features.map(function(points){
-
 			var location = points.geometry.coordinates.reverse();
 			// location.push(0.9);
 			return location;
@@ -302,34 +305,27 @@ function heatLayer(data) {
 
 	// Draw heatmap
 	 heat = new L.heatLayer(locations)
-		
 
 	// Set heatmap parameters
 	heat.setOptions({
         radius: 9,
         max: 1.0,
-        minOpacity: 0.7,
+        minOpacity: 0.8,
         scaleRadius: true,
         useLocalExtrema: true,
     });
-
+    //     	map.addLayer(heat);
+	layerControl.addOverlay(heat, "Heatmap")
 };
 
-$("#Cbox2").click(function() {
-	if(this.checked){
-    	map.addLayer(heat);
-	}else{
-		map.removeLayer(heat);
-	}    
-    });
 
 	// ---------- PLOT CLUSTER MAP ---------------
 var clusters;
 
 function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
 	if(clusters){
-		$( "#Cbox3" ).prop( "checked", false );
 		map.removeLayer(clusters);
+		layerControl.removeLayer(clusters);
 	}
 	geoJsonLayer = new L.geoJson(data,{
 			pointToLayer: function(feature, latlng){
@@ -340,21 +336,14 @@ function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
 					"</br>" +
 					"<b>Block: </b>"+feature.properties.block  + 
 					"</br>" +
-					"<b>Date: </b>"+Date(feature.properties.date));
+					"<b>Date: </b>"+feature.properties.date);
 			},
         });
 
 	clusters = new L.markerClusterGroup({ disableClusteringAtZoom: 15 });
 
     clusters.addLayer(geoJsonLayer);
+    // map.addLayer(clusters);
+    layerControl.addOverlay(clusters, "Clusters")
 };
 
-		// Hide and Show Heatmap
-	$("#Cbox3").click(function() {
-		if(this.checked){
-	    	map.addLayer(clusters);
-		}else{
-			map.removeLayer(clusters);
-		}    
-	    });
-	

@@ -1,5 +1,5 @@
     // load the map
-var map = new L.map('map', {layer:"mapbox", center: [41.85, -87.66], zoom: 10}, {doubleClickZoom: false});
+var map = new L.map('map', {layer:"mapbox", center: [41.84, -87.66], zoom: 10}, {doubleClickZoom: false});
 
 
 // load the tiles
@@ -28,5 +28,5 @@ var baseLayers = {
 	"Mapbox": mapbox,
 	};  
 
-	L.control.layers(baseLayers).addTo(map);	
+var layerControl =L.control.layers(baseLayers).addTo(map);	
 

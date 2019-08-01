@@ -66,7 +66,7 @@
                 <select id="crimeType" name="crimeType" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
                 </select>
                 <label for="startDate"><b>Start Date</b></label>
-                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2012-01-08">
+                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2016-07-08">
                 <label for="endDate"><b>End Date</b></label>
                 <input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" value="2019-07-08">
                 <label for="group"><b>Arrest</b></label>
@@ -109,14 +109,6 @@
             </nav>
             <div class="row" style="margin-left: 5px">
                 <div class="col-sm-5 col-md-5 col-lg-5">
-                    <div class="bg" style="margin-left: 40px">
-                        <input id="Cbox1" type="checkbox" >
-                        <label for="Cbox1">Choropleth Map</label>
-                        <input id="Cbox2" type="checkbox" style="margin-left: 5px">
-                        <label for="Cbox2">Heatmap Map</label>
-                        <input id="Cbox3" type="checkbox" style="margin-left: 5px">
-                        <label for="Cbox3">Cluster Map</label>
-                    </div>
                     <div id="map" ></div>
                 </div>
                 <div class="col-sm-7 col-md-7 col-lg-7">
@@ -171,6 +163,7 @@
     <script src="js/leaflet-heat.js"></script>
     <script src="js/fillDropdowns.js"></script>
     <script src="js/choroplethLayer.js"></script>
+    <script src="js/choropleth.js"></script>
     <script src="js/graphs.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
