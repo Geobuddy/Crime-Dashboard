@@ -1,75 +1,39 @@
-$('.form-control').change(function() {
-	/* Act on the event */
-	var offence= $("#crimeType").val();
-	var arrest= $("#arrest").val();
-	var domestic= $("#domestic").val();
-	var startDate= $("#startDate").val();
-	var endDate= $("#endDate").val();
-	console.log(offence, arrest, domestic, startDate,endDate);
+function foo(arr) {
+    var a = [], b = [], prev;
+    
+    arr.sort();
+    for ( var i = 0; i < arr.length; i++ ) {
+        if ( arr[i] !== prev ) {
+            a.push(arr[i]);
+            b.push(1);
+        } else {
+            b[b.length-1]++;
+        }
+        prev = arr[i];
+    }  
+    return [a, b];
+}
 
-	// ------------------- QUERY TO PLOT CRIME COUNT PER TYPE ---------------------
 
+function graph1(data){
 
-	var formDataGraph = new FormData();
-
-    var formDataGraph =  {
-        	"$select" : "primary_type"
-        	+ ", "
-        	+ 'count(primary_type) as offence',
-        	"$group" : "primary_type",
-        	"$where" : "date >='" + startDate + "'"
-        	+ " AND date <='" + endDate + "'"
-        	+ " AND latitude IS NOT NULL",
-        	"arrest" : arrest,
-        	"domestic" : domestic,
-			"primary_type" : offence,
-        	"$order" : "offence DESC",
-        	"$limit" : 100000,
-        	"$$app_token": app_token};
-
-        if (offence == "All") {
-		  //  block of code to be executed if condition1 is true
-		  delete formDataGraph.primary_type;
-		}if (arrest == "All"){
-			delete formDataGraph.arrest;
-		}if (domestic == "All"){
-			delete formDataGraph.domestic;
-		}else{
-
-		};
-
-	$.ajax({
-		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
-		method: "GET",
-		dataType: "json",
-        data: formDataGraph,
-	}).done(function( data) {
-		graph1(data);
-		});
-
-function graph1(graphData){
-
-	var data = graphData.features;
-
-	var x = [];
-	var y = [];
-
+	var data = data.features;
+	var arr = [];
 
 	for(var i =0; i < data.length; i++){
-		y.push(data[i].properties.primary_type);
-		x.push(+data[i].properties.offence);
-
+		arr.push(data[i].properties.primary_type);
 	}
-	
+	var result = foo(arr);
+	// console.log(result);
 	var barChart = [{
-			x:x,
-			y:y,
+			x:result[1],
+			y:result[0],
 			type: "bar",
 			orientation: "h",
 			transforms: [{
 		    type: 'sort',
-		    target: 'y',
-		    order: 'descending'
+		    target: 'x',
+		    order: 'ascending'
 		 	}]
 			}];
 
@@ -88,12 +52,18 @@ function graph1(graphData){
 		}
 	};
 
-	
-
 	Plotly.newPlot('graph1', barChart,layout, {responsive: true});
 
 }
 
+$('.form-control').change(function() {
+	/* Act on the event */
+
+	var offence= $("#crimeType").val();
+	var arrest= $("#arrest").val();
+	var domestic= $("#domestic").val();
+	var startDate= $("#startDate").val();
+	var endDate= $("#endDate").val();
 	// ---------- Plot To Time-Series ---------------
 
 	var formDataLineGraph = new FormData();
@@ -110,7 +80,7 @@ function graph1(graphData){
         	"domestic" : domestic,
 			"primary_type" : offence,
         	"$order" : "date ASC",
-        	"$limit" : 100000,
+        	"$limit" : 200000,
         	"$$app_token" : app_token};
 
         if (offence == "All") {
@@ -130,11 +100,14 @@ function graph1(graphData){
 		dataType: "json",
         data: formDataLineGraph,
 	}).done(function(data) {
+		graph2(data);
 		graph3(data);
+		console.log(data);
 		});
 
-function graph3(lineGraphData) {
-	var data = lineGraphData.features;
+function graph2(data) {
+	console.log(data);
+	var data = data.features;
 
 	var x = [];
 	var y = [];
@@ -220,108 +193,71 @@ function graph3(lineGraphData) {
 	var plot = [barChart, trace]
 	Plotly.newPlot('graph2', plot,layout, {responsive: true})
 
-	var boxplot = {
-	  x: y,
-	  boxpoints: 'all',
-	  jitter: 0.3,
-	  pointpos: 1.8,
-	  name: "" + offence + "",
-	  type: 'box',
-	};
-
-	var data = [boxplot];
-
-	var layout = {
-	  yaxis:{
-	  	tickfont: {
-		    size: 8,
-		    },
-	  },
-	  margin: {
-		    l: 170
-		}
-
-	};
-
-	Plotly.newPlot('graph5', data, layout, {responsive: true});
-
 }
 
 });
 
-function graph2(data) {
-	//data from choropleth AJAX
-	// ---------- Plot Histogram for Crime count per Community ---------------
+function graph3(data) {
+
+	var offence= $("#crimeType").val();
+
+	var data = data.features;
+	var yHist = [];
+	for(var i =0; i < data.length; i++){
+		yHist.push(data[i].properties.offence);
+	};
+
+	var trace1 = {
+	  x: yHist,
+	  type: 'box',
+	  name: ' ',
+	  boxmean: true,
+	};
+
+	var data = [trace1];
+
+	var layout = {
+	  title: '' + offence + ' Crime Count Box Plot'
+	};
+
+Plotly.newPlot('graph3', data, layout,{responsive: true});
+}
+
+function graph4(data) {
+	//data from Heatmap AJAX request
+
+	// ---------- Plot Histogram for Arrest and Domestic count ---------------
 	
-	var myCrime = data.features;
-	var myBoundary = data.features;
+	var myData = data.features;
 
-	var x = [];
-	var xHist = [];
-	var yHist = []
+	var xHist1 = [];
+	var xHist2 = []
 
-	for(var i =0; i < myCrime.length; i++){
-		x.push(myCrime[i].properties.offence);
-		xHist.push(+myCrime[i].properties.community_area);
-		yHist.push(myCrime[i].properties.offence);
+	for(var i =0; i < myData.length; i++){
+		xHist1.push(myData[i].properties.arrest);
+		xHist2.push(myData[i].properties.domestic);
 	}
 	
-	var histogram = [{
-			x:x,
+	console.log(xHist1, xHist2);
+	var histogram1 = {
+			x:xHist1,
 			type: "histogram",
 			histfunc: "count",
-			}];
+			name: "Arrest",
+			};
 
-	var layout = {
-		title: "Crime Histogram",
-		yaxis: {
-			title: "Count"
-		},
-		xaxis:{
-			title: "Bins"
-		},
-		bargap: 0.05,
-		xbins: {
-			size:20000,
-		}
-	};	
+	var histogram2 = {
+			x:xHist2,
+			type: "histogram",
+			histfunc: "count",
+			name: "Domestic",
+			marker: {
+			    color: 'red'
+			  }
+			};
 
-	Plotly.newPlot('graph4', histogram,layout,{showSendToCloud: true, responsive: true});
+	var data = [histogram1, histogram2];
 
+	Plotly.newPlot('graph4', data,{responsive: true});
 
-	// ---------- Plot Crime count per Community Area ---------------
-	
-	// xHist = xHist.map(String);
-
-	var barChart = [{
-			x:xHist,
-			y:yHist,
-			type: "bar",
-			transforms: [{
-		    type: 'sort',
-		    target: 'y',
-		    order: 'descending'
-		 	}]
-			}];
-
-	var layout = {
-		title: "Crime Count per Community Area",
-		yaxis: {
-			title: "Crime Count"
-		},
-		xaxis: {
-			title: "Community Area",
-			type:'category'
-		}
-	};
-	Plotly.newPlot('graph3', barChart,layout, {responsive: true});
 }
-
-
-// Resize plot when the widown size is changed
-$( '.row' ).resize(function() {
-  Plotly.relayout('.graph', {
-	    width: 0.45 * $( '.row' ).innerWidth,
-	    height: 0.45 * $( '.row' ).innerHeight
-	  });
-});

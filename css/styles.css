@@ -360,6 +360,7 @@ a.article:hover {
   }
 
 .info {
+color: #555;
 padding: 6px 8px;
 font: 14px/16px Arial, Helvetica, sans-serif;
 background: white;
@@ -415,7 +416,7 @@ float: right;
     color: #777;
 }
 
-#map { width: 100%; height: 600px; }
+#map { width: 100%; height: 825px; }
 
 .button {
   font-size: 10px;

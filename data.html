@@ -32,11 +32,10 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
 
-    <!--the following links incorporate the CSS required for custom icon creation -->
-    <link rel="stylesheet" href="./css/ionicons.min.css">
-    <link rel="stylesheet" href="./css/leaflet.awesome-markers.css">
-    <script src="./js/leaflet.awesome-markers.js"></script>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
 </head>
 
 <body>
@@ -49,17 +48,17 @@
 
             <ul class="list-unstyled components">
                 <label for="group"><b>Offence Group</b></label>
-                <select id="crimeType" name="crimeType" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+                <select id="crimeType" name="crimeType" class="form-control" ><option value="All" selected="selected"> -- ALL --</option>
                 </select>
                 <label for="startDate"><b>Start Date</b></label>
-                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2012-01-08">
+                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2019-01-08" >
                 <label for="endDate"><b>End Date</b></label>
                 <input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" value="2019-07-08">
                 <label for="group"><b>Arrest</b></label>
                 <select id="arrest" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
                 </select>
                 <label for="group"><b>Domestic</b></label>
-                <select id="domestic" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+                <select id="domestic" class="form-control"><option value="All" selected="selected" > -- ALL --</option>
                 </select>            
             </ul>
         </nav>
@@ -83,45 +82,40 @@
                             <li class="nav-item">
                                 <a class="nav-link py-0" href="index.html">MAIN</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-0" href="analysis.html">ANALYSIS</a>
+                            </li>
                             <li class="nav-item active">
                                 <a class="nav-link active py-0" href="data.html">DATA</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link py-0" href="about.html">ABOUT</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-            <div class="row" style="margin-left: 5px">
-                <table class="table">
-                <thead>
-                  <tr>
-                    <th>Crime Type</th>
-                    <th>Min</th>
-                    <th>Q1</th>
-                    <th>Mean Type</th>
-                    <th>Q3</th>
-                    <th>Max</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>.com</td>
-                    <td>Doe</td>
-                    <td>.com</td>
-                    <td>Doe</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="container-fluid" >
+                <div class="row" style="margin-left: 5px">
+                  <table id="myTable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th >Crime Type</th>
+                            <th >Description</th>
+                            <th>Location</th>
+                            <th>Date</th>
+                            <th>Arrest</th>
+                            <th>Domestic</th>
+                            <th>Community Area</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="js/leaflet.awesome-markers.js"></script>
-
+    <script src="js/tableData.js"></script>
+    <script src="js/filters.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {

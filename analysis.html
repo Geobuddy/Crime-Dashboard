@@ -63,23 +63,27 @@
 
             <ul class="list-unstyled components">
                 <label for="group"><b>Offence Group</b></label>
-                <select id="crimeType" name="crimeType" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+                <select id="crimeType1" name="crimeType2" class="form-control" value="ARSON" onchange="loadPage()">
+                </select>
+                <label for="group"><b>Offence Group</b></label>
+                <select id="crimeType2" name="crimeType2" class="form-control" onchange="loadPage()">
                 </select>
                 <label for="startDate"><b>Start Date</b></label>
-                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2016-01-01">
+                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2016-01-01" onchange="loadPage()">
                 <label for="endDate"><b>End Date</b></label>
-                <input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" value="2019-07-31">
+                <input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" value="2019-07-31" onchange="loadPage()">
                 <label for="group"><b>Arrest</b></label>
-                <select id="arrest" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+                <select id="arrest" class="form-control"><option value="All" selected="selected" onchange="loadPage()"> -- ALL --</option>
                 </select>
                 <label for="group"><b>Domestic</b></label>
-                <select id="domestic" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
+                <select id="domestic" class="form-control"><option value="All" selected="selected" onchange="loadPage()"> -- ALL --</option>
                 </select>            
             </ul>
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
+
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
 
@@ -93,11 +97,11 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link active py-0" href="index.html">MAIN</a>
-                            </li>
                             <li class="nav-item">
-                                <a class="nav-link py-0" href="analysis.html">ANALYSIS</a>
+                                <a class="nav-link py-0" href="index.html">MAIN</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link active py-0" href="analysis.html">ANALYSIS</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link py-0" href="data.html">DATA</a>
@@ -109,20 +113,16 @@
             <div class="container-fluid" >
                 <div class="row" style="margin-left: 5px">
                     <div class="col-sm-6 col-md-6 col-lg-6">
-                        <div id="map" ></div>
+                        <div id="graph1" ></div>
+
+                        <div id="graph3"></div>
+
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-6">
-                        <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph1">Crime Count by Type</button>
-                        <div id="graph1" class="collapse graph"></div>
 
-                        <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph2" style="margin-top: 10px">Time Series</button>
-                        <div id="graph2" class="collapse graph"></div>
+                        <div id="graph2" ></div>
 
-                        <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph3" style="margin-top: 10px">Boxplot</button>
-                        <div id="graph3" class="collapse graph"></div>
-
-                        <button type="button" class="btn btn-sm btn-info collapsed btn-block" data-toggle="collapse" data-target="#graph4" style="margin-top: 10px">Arrest & Domestic Count</button>
-                        <div id="graph4" class="collapse graph"></div>
+                        <div id="graph4"></div>
 
                         </div>
                     </div>
@@ -130,14 +130,7 @@
             </div>
         </div>
     </div>
-
-    <script src="js/leaflet.awesome-markers.js"></script>
-    <script src="js/baseLayers.js"></script>
-    <script src="js/leaflet-heat.js"></script>
-    <script src="js/filters.js"></script>
-    <script src="js/maps.js"></script>
-    <script src="js/choropleth.js"></script>
-    <script src="js/graphs.js"></script>
+    <script src="js/analysis.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
