@@ -231,8 +231,8 @@ $('.form-control').change(function() {
 	var formHeatmap = new FormData();
 
     var formHeatmap =  {
-        	"$where" : "date >'" + startDate + "'"
-        	+ " AND date <'" + endDate + "'"
+        	"$where" : "date >='" + startDate + "'"
+        	+ " AND date <='" + endDate + "'"
         	+ " AND latitude IS NOT NULL",
         	"arrest" : arrest,
         	"domestic" : domestic,

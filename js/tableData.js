@@ -12,8 +12,8 @@ $(window).on('load',function() {
 		var formTable = new FormData();
 
 	    var formTable =  {
-	        	"$where" : "date >'" + startDate + "'"
-	        	+ " AND date <'" + endDate + "'"
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
 	        	+ " AND latitude IS NOT NULL",
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,

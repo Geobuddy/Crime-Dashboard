@@ -35,10 +35,7 @@ function graph1(data){
 		    target: 'x',
 		    order: 'ascending'
 		 	}],
-		 	marker: {
-		 		 colorscale: 'YIOrRd',
-		 	}
-			}];
+		}];
 
 	var layout = {
 		title: "Crime by Type",
@@ -76,8 +73,8 @@ $('.form-control').change(function() {
         	+ ", "
         	+ 'count(primary_type) as offence',
         	"$group" : "date",
-        	"$where" : "date >'" + startDate + "'"
-        	+ " AND date <'" + endDate + "'"
+        	"$where" : "date >='" + startDate + "'"
+        	+ " AND date <='" + endDate + "'"
         	+ " AND latitude IS NOT NULL",
         	"arrest" : arrest,
         	"domestic" : domestic,

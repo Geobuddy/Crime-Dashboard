@@ -75,8 +75,8 @@ function loadPage() {
 		var formParam1 = new FormData();
 
 	    var formParam1 =  {
-	        	"$where" : "date >'" + startDate + "'"
-	        	+ " AND date <'" + endDate + "'"
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
 	        	+ " AND latitude IS NOT NULL"
 	        	+ " AND primary_type IN ('" + offence1 + "','" + offence2 + "')",
 	        	"arrest" : arrest,
@@ -174,8 +174,8 @@ function loadPage() {
 	        	+ ", "
 	        	+ 'count(primary_type) as offence1',
 	        	"$group" : "date1",
-	        	"$where" : "date >'" + startDate + "'"
-	        	+ " AND date <'" + endDate + "'"
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
 	        	+ " AND latitude IS NOT NULL",
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,
@@ -198,8 +198,8 @@ function loadPage() {
 	        	+ ", "
 	        	+ 'count(primary_type) as offence2',
 	        	"$group" : "date2",
-	        	"$where" : "date >'" + startDate + "'"
-	        	+ " AND date <'" + endDate + "'"
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
 	        	+ " AND latitude IS NOT NULL",
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,
