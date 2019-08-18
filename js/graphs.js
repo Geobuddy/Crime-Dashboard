@@ -34,7 +34,10 @@ function graph1(data){
 		    type: 'sort',
 		    target: 'x',
 		    order: 'ascending'
-		 	}]
+		 	}],
+		 	marker: {
+		 		 colorscale: 'YIOrRd',
+		 	}
 			}];
 
 	var layout = {
@@ -102,11 +105,11 @@ $('.form-control').change(function() {
 	}).done(function(data) {
 		graph2(data);
 		graph3(data);
-		console.log(data);
+		// console.log(data);
 		});
 
 function graph2(data) {
-	console.log(data);
+	// console.log(data);
 	var data = data.features;
 
 	var x = [];
@@ -238,7 +241,7 @@ function graph4(data) {
 		xHist2.push(myData[i].properties.domestic);
 	}
 	
-	console.log(xHist1, xHist2);
+	// console.log(xHist1, xHist2);
 	var histogram1 = {
 			x:xHist1,
 			type: "histogram",

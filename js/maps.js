@@ -181,7 +181,7 @@ function getData(boundaries){
 		valueProperty: "crime_rate",
 		scale: ['#FFEDA0','#FED976','#FEB24C','#FD8D3C','#FC4E2A','#E31A1C','#BD0026','#800026'],
 		steps: 8,
-		mode: "q",
+		mode: "k",
 		style: style,
 		onEachFeature: onEachFeature
 	})
@@ -193,7 +193,6 @@ function getData(boundaries){
 var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (map) {
-
 	var div = L.DomUtil.create('div', 'info legend'),
 		grades = ['#FFEDA0','#FED976','#FEB24C','#FD8D3C','#FC4E2A','#E31A1C','#BD0026','#800026'] //[50, 100, 200, 500, 1000],
 		labels = []

@@ -368,12 +368,18 @@ function loadPage() {
 		// ------------- Plot Histogram -------------
 		var trace1 = {
 		  x: y1,
+		  marker: {
+	          line: {
+	          	color: "black",
+	          	width: 1
+	          }
+		    },
 		  name: ""+ offence1 +"",
 		  opacity: 0.5, 
 		  type: "histogram", 
 		  ybins: {
 		    end: 4, 
-		    size: 0.06, 
+		    size: 0.04, 
 		    start: .5
 		  }
 		};
@@ -381,21 +387,25 @@ function loadPage() {
 		  x: y2, 
 		  marker: {
 	          color: "red",
+	          line: {
+	          	color: "black",
+	          	width: 1
+	          }
 		    }, 
 		  name: ""+ offence2 +"",
 		  opacity: 0.75, 
 		  type: "histogram", 
 		  ybins: { 
 		    end: 4, 
-		    size: 0.06, 
+		    size: 0.04, 
 		    start: -3.2
 		  }
 		};
 		var data = [trace1, trace2];
 
 		var layout = {
-		  bargap: 0.05, 
-		  bargroupgap: 0.2, 
+		  // bargap: 0.05, 
+		  // bargroupgap: 0.2, 
 		  barmode: "overlay", 
 		  title: "Histogram", 
 		  xaxis: {title: "Value"}, 
