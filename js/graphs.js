@@ -307,6 +307,10 @@ function graph4(data) {
 	var result = foo(xPie1);
 	var result1 = foo(xPie2);
 
+	var arrestPercentage = (result[1][1]/(result[1][0]+result[1][1]))*100;
+	if(isNaN(arrestPercentage) == true){
+		arrestPercentage = 0;
+	}
 	var pie1 = {
 			  values: result[1],
 			  labels: result[0],
@@ -315,19 +319,24 @@ function graph4(data) {
 			  marker: {
 			    colors: ['red','blue']
 			  },
+			  textinfo: 'none',
 			  domain: {
 			    row: 0,
 			    column: 0
 			  },
 			  hole: .7,
 			  title: {
-			    text:'Arrest',
+			    text:''+ arrestPercentage.toFixed(1) +'%<br> Arrest(s)',
 			    font: {
 			      size: 24
 			    },
 			  },
 			}
 
+	var domesticPercentage = (result1[1][1]/(result1[1][0]+result1[1][1]))*100;
+	if(isNaN(domesticPercentage) == true){
+		domesticPercentage = 0;
+	}
 	var pie2 = {
 		values: result1[1],
 		  labels: result1[0],
@@ -336,8 +345,9 @@ function graph4(data) {
 		  marker: {
 		    colors: ['red','blue']
 		  },
+		  textinfo: 'none',
 		  title: {
-		    text:'Domestic',
+		    text:''+ domesticPercentage.toFixed(1) +'%<br> Domestic(s)',
 		    font: {
 		      size: 24
 		    },

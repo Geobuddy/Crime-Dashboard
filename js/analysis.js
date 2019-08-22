@@ -81,7 +81,7 @@ function loadPage() {
 	        	+ " AND primary_type IN ('" + offence1 + "','" + offence2 + "')",
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,
-				"$limit": 200000,
+				"$limit": 500000,
 	        	"$$app_token" : app_token};
 
 	        if (arrest == "All"){
@@ -187,12 +187,15 @@ function loadPage() {
 				}
 			}
 
-			// console.log(xPie1, xPie2,xPie3, xPie4);
 			var result = foo(xPie1);
 			var result1 = foo(xPie2);
 			var result2 = foo(xPie3);
 			var result3 = foo(xPie4);
 
+			var arrestPercentage1 = (result[1][1]/(result[1][0]+result[1][1]))*100;
+			if(isNaN(arrestPercentage1) == true){
+				arrestPercentage1 = 0;
+			};
 			var pie1 = {
 					  values: result[1],
 					  labels: result[0],
@@ -201,19 +204,24 @@ function loadPage() {
 					  marker: {
 					    colors: ['red','blue']
 					  },
+					  textinfo: 'none',
 					  title: {
-					    text:'Arrest',
+					    text:''+ arrestPercentage1.toFixed(1) +'%<br> Arrest(s)',
 					    font: {
 					      size: 16
 					    },
 					  },
-					  hole: .6,
+					  hole: .8,
 					  domain: {
 					    row: 0,
 					    column: 0
 					  },
 					}
 
+			var domesticPercentage1 = (result1[1][1]/(result1[1][0]+result1[1][1]))*100;
+			if(isNaN(domesticPercentage1) == true){
+				domesticPercentage1 = 0;
+			};
 			var pie2 = {
 				values: result1[1],
 				  labels: result1[0],
@@ -222,19 +230,24 @@ function loadPage() {
 				  marker: {
 				    colors: ['red','blue']
 				  },
+				  textinfo: 'none',
 				  title: {
-				    text:'Domestic',
+				    text:''+ domesticPercentage1.toFixed(1) +'%<br> Domestic(s)',
 				    font: {
 				      size: 16
 				    },
 				  },
-				  hole: .6,
+				  hole: .8,
 				  domain: {
 				    row: 0,
 				    column: 1
 				  },
 				};
 
+			var arrestPercentage2 = (result2[1][1]/(result2[1][0]+result2[1][1]))*100;
+			if(isNaN(arrestPercentage2) == true){
+				arrestPercentage2 = 0;
+			};
 			var pie3 = {
 					  values: result2[1],
 					  labels: result2[0],
@@ -243,19 +256,23 @@ function loadPage() {
 					  marker: {
 					    colors: ['red','blue']
 					  },
+					  textinfo: 'none',
 					  title: {
-					    text:'Arrest',
+					    text:''+ arrestPercentage2.toFixed(1) +'%<br> Arrest(s)',
 					    font: {
 					      size: 16
 					    },
 					  },
-					  hole: .6,
+					  hole: .8,
 					  domain: {
 					    row: 1,
 					    column: 0
 					  },
 					}
-
+			var domesticPercentage2 = (result3[1][1]/(result3[1][0]+result3[1][1]))*100;
+			if(isNaN(domesticPercentage2) == true){
+				domesticPercentage2 = 0;
+			}
 			var pie4 = {
 				values: result3[1],
 				  labels: result3[0],
@@ -264,13 +281,14 @@ function loadPage() {
 				  marker: {
 				    colors: ['red','blue']
 				  },
+				  textinfo: 'none',
 				  title: {
-					    text:'Domestic',
+					    text:''+ domesticPercentage2.toFixed(1) +'%<br> Domestic(s)',
 					    font: {
 					      size: 16
 					    },
 					  },
-				  hole: .6,
+				  hole: .8,
 				  domain: {
 				    row: 1,
 				    column: 1,
