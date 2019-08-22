@@ -91,7 +91,6 @@ $('.form-control').change(function() {
 		}if (domestic == "All"){
 			delete formDataLineGraph.domestic;
 		}else{
-
 		};
 
 	$.ajax({
@@ -101,8 +100,6 @@ $('.form-control').change(function() {
         data: formDataLineGraph,
 	}).done(function(data) {
 		graph2(data);
-		graph3(data);
-		// console.log(data);
 		});
 
 function graph2(data) {
@@ -179,7 +176,7 @@ function graph2(data) {
 		};
 
 	var layout = {
-		title: "Crime Time-Series",
+		title: 'Crime Time-Series from '+ $("#startDate").val() + ' to '+ $("#endDate").val() + '',
 		xaxis: {
         rangeselector: selectorOptions,
         rangeslider: {}
@@ -193,8 +190,42 @@ function graph2(data) {
 	var plot = [barChart, trace]
 	Plotly.newPlot('graph2', plot,layout, {responsive: true})
 
-}
+}	
+	var formDataBarGraph = new FormData();
 
+    var formDataBarGraph =  {
+        	"$select" : "date_extract_m(date) as month"
+        	+ ", "
+        	+ 'count(primary_type) as offence',
+        	"$group" : "month",
+        	"$where" : "date >='" + startDate + "'"
+        	+ " AND date <='" + endDate + "'"
+        	+ " AND latitude IS NOT NULL",
+        	"arrest" : arrest,
+        	"domestic" : domestic,
+			"primary_type" : offence,
+        	"$order" : "month ASC",
+        	"$limit" : 200000,
+        	"$$app_token" : app_token};
+
+        if (offence == "All") {
+		  //  block of code to be executed if condition1 is true
+		  delete formDataBarGraph.primary_type;
+		}if (arrest == "All"){
+			delete formDataBarGraph.arrest;
+		}if (domestic == "All"){
+			delete formDataBarGraph.domestic;
+		}else{
+		};
+
+	$.ajax({
+		url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
+		method: "GET",
+		dataType: "json",
+        data: formDataBarGraph,
+	}).done(function(data) {
+		graph3(data);
+		});
 });
 
 function graph3(data) {
@@ -203,21 +234,56 @@ function graph3(data) {
 
 	var data = data.features;
 	var yHist = [];
+
+	var Year1 = new Date($("#startDate").val()).getFullYear();
+	var Year2 = new Date($("#endDate").val()).getFullYear();
+	var numYear = Year2 - Year1
+
 	for(var i =0; i < data.length; i++){
-		yHist.push(data[i].properties.offence);
+		yHist.push(data[i].properties.offence/numYear);
 	};
 
-	var trace1 = {
-	  x: yHist,
-	  type: 'box',
-	  name: ' ',
-	  boxmean: true,
-	};
+	var month = new Array(12);
+	month[0] = "January";
+	month[1] = "February";
+	month[2] = "March";
+	month[3] = "April";
+	month[4] = "May";
+	month[5] = "June";
+	month[6] = "July";
+	month[7] = "August";
+	month[8] = "September";
+	month[9] = "October";
+	month[10] = "November";
+	month[11] = "December";
+
+
+	var trace1 = 
+		  {
+		x: month,
+		y: yHist,
+	    type: "bar",
+	    bins: {
+		    end: 2.8, 
+		    size: 0.06, 
+		    start: .5
+		  },
+	    marker: {
+           line: {
+            color:  "black", 
+            width: 1
+    	},
+    	} 
+		};
 
 	var data = [trace1];
 
 	var layout = {
-	  title: '' + offence + ' Crime Count Box Plot'
+	  title: 'Average Monthly '+ offence +' Crime from '+ $("#startDate").val() + ' to '+ $("#endDate").val() + '',
+	  yaxis: {
+    		fixedrange: true,
+    		title: "Count"
+    	}
 	};
 
 Plotly.newPlot('graph3', data, layout,{responsive: true});
@@ -226,38 +292,70 @@ Plotly.newPlot('graph3', data, layout,{responsive: true});
 function graph4(data) {
 	//data from Heatmap AJAX request
 
-	// ---------- Plot Histogram for Arrest and Domestic count ---------------
+	// ---------- Plot Pie chart for Arrest and Domestic count ---------------
 	
 	var myData = data.features;
 
-	var xHist1 = [];
-	var xHist2 = []
+	var xPie1 = [];
+	var xPie2 = [];
 
 	for(var i =0; i < myData.length; i++){
-		xHist1.push(myData[i].properties.arrest);
-		xHist2.push(myData[i].properties.domestic);
+		xPie1.push(myData[i].properties.arrest);
+		xPie2.push(myData[i].properties.domestic);
 	}
-	
-	// console.log(xHist1, xHist2);
-	var histogram1 = {
-			x:xHist1,
-			type: "histogram",
-			histfunc: "count",
-			name: "Arrest",
-			};
 
-	var histogram2 = {
-			x:xHist2,
-			type: "histogram",
-			histfunc: "count",
-			name: "Domestic",
-			marker: {
-			    color: 'red'
-			  }
-			};
+	var result = foo(xPie1);
+	var result1 = foo(xPie2);
 
-	var data = [histogram1, histogram2];
+	var pie1 = {
+			  values: result[1],
+			  labels: result[0],
+			  type: 'pie',
+			  name: '' + $("#crimeType").val() + '',
+			  marker: {
+			    colors: ['red','blue']
+			  },
+			  domain: {
+			    row: 0,
+			    column: 0
+			  },
+			  hole: .7,
+			  title: {
+			    text:'Arrest',
+			    font: {
+			      size: 24
+			    },
+			  },
+			}
 
-	Plotly.newPlot('graph4', data,{responsive: true});
+	var pie2 = {
+		values: result1[1],
+		  labels: result1[0],
+		  type: 'pie',
+		  name: '' + $("#crimeType").val() + '',
+		  marker: {
+		    colors: ['red','blue']
+		  },
+		  title: {
+		    text:'Domestic',
+		    font: {
+		      size: 24
+		    },
+		  },
+		  hole: .7,
+		  domain: {
+		    row: 0,
+		    column: 1
+		  },
+		};
+
+	var data = [pie1,pie2];
+
+	var layout = {
+		title: '' + $("#crimeType").val() + ' Arrest & Domestic Count',
+		  grid: {rows: 1, columns: 2}
+		};
+
+	Plotly.newPlot('graph4', data, layout, {responsive: true});
 
 }

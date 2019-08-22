@@ -99,6 +99,7 @@ function loadPage() {
 	        data: formParam1,
 		}).done(function(data) {
 			graph1(data);
+			graph3(data);
 		});
 
 
@@ -154,7 +155,7 @@ function loadPage() {
 				},
 				yaxis: {
 					tickfont: {
-				    size: 8,
+				    size: 10,
 				    },
 				},
 				margin: {
@@ -165,6 +166,130 @@ function loadPage() {
 			Plotly.newPlot('graph1', barChart,layout, {responsive: true});
 		};
 
+		// ------------ Plot Boxplot ---------------
+
+		function graph3(data){
+			var myData = data.features;
+
+			var xPie1 = [];
+			var xPie2 = [];
+			var xPie3 = [];
+			var xPie4 = [];
+
+			for(var i =0; i < myData.length; i++){
+				if(myData[i].properties.primary_type == $("#crimeType1").val()){
+				xPie1.push(myData[i].properties.arrest);
+				xPie2.push(myData[i].properties.domestic);
+				}
+				else{
+					xPie3.push(myData[i].properties.arrest);
+					xPie4.push(myData[i].properties.domestic);
+				}
+			}
+
+			// console.log(xPie1, xPie2,xPie3, xPie4);
+			var result = foo(xPie1);
+			var result1 = foo(xPie2);
+			var result2 = foo(xPie3);
+			var result3 = foo(xPie4);
+
+			var pie1 = {
+					  values: result[1],
+					  labels: result[0],
+					  type: 'pie',
+					  name: '' + $("#crimeType1").val() + '',
+					  marker: {
+					    colors: ['red','blue']
+					  },
+					  title: {
+					    text:'Arrest',
+					    font: {
+					      size: 16
+					    },
+					  },
+					  hole: .6,
+					  domain: {
+					    row: 0,
+					    column: 0
+					  },
+					}
+
+			var pie2 = {
+				values: result1[1],
+				  labels: result1[0],
+				  type: 'pie',
+				  name: '' + $("#crimeType1").val() + '',
+				  marker: {
+				    colors: ['red','blue']
+				  },
+				  title: {
+				    text:'Domestic',
+				    font: {
+				      size: 16
+				    },
+				  },
+				  hole: .6,
+				  domain: {
+				    row: 0,
+				    column: 1
+				  },
+				};
+
+			var pie3 = {
+					  values: result2[1],
+					  labels: result2[0],
+					  type: 'pie',
+					  name: '' + $("#crimeType2").val() + '',
+					  marker: {
+					    colors: ['red','blue']
+					  },
+					  title: {
+					    text:'Arrest',
+					    font: {
+					      size: 16
+					    },
+					  },
+					  hole: .6,
+					  domain: {
+					    row: 1,
+					    column: 0
+					  },
+					}
+
+			var pie4 = {
+				values: result3[1],
+				  labels: result3[0],
+				  type: 'pie',
+				  name: '' + $("#crimeType2").val() + '',
+				  marker: {
+				    colors: ['red','blue']
+				  },
+				  title: {
+					    text:'Domestic',
+					    font: {
+					      size: 16
+					    },
+					  },
+				  hole: .6,
+				  domain: {
+				    row: 1,
+				    column: 1,
+				  },
+				};
+
+			var data = [pie1,pie2,pie3,pie4];
+
+			var layout = {
+				title:{
+					text: '' + $("#crimeType1").val() + ' & '+ $("#crimeType2").val() +' Arrest and Domestic Count',
+					size: 16
+				},
+				grid: {rows: 2, columns: 2}
+				};
+
+		Plotly.newPlot('graph3', data,layout,{responsive: true});
+
+		};
 
 		// ---------- Plot To Time-Series ---------------
 
@@ -240,7 +365,6 @@ function loadPage() {
 
 			var x1 = [];
 			var y1 = [];
-
 			var x2 = [];
 			var y2 = [];
 
@@ -324,105 +448,161 @@ function loadPage() {
 			Plotly.newPlot('graph2', plot,layout, {responsive: true});
 		};
 
-
-		// ------------ Plot Boxplot ---------------
-
-		var trace1 = {
-		  y: y1,
-		  type: 'box',
-		  name: ""+ offence1 +"",
-		  boxmean: 'sd',
-		};
-
-		var trace2 = {
-		  y: y2,
-		  type: 'box',
-		  name: ""+ offence2 +"",
-		  boxmean: 'sd',
-		  marker: {
-			    color: 'red'
-		  }
-		};
-
-		var data = [trace1, trace2];
-
-		var layout = {
-		  title: 'Box Plot',
-		  xaxis: {
-			tickfont: {
-		    size: 8,
-		    },
-		},
-		legend: {
-		    x: 1,
-		    y: 0.5,
-		    font: {
-		    	size:6
-		    }
-		}
-		};
-
-		Plotly.newPlot('graph3', data,layout,{responsive: true});
-
-
-		// ------------- Plot Histogram -------------
-		var trace1 = {
-		  x: y1,
-		  marker: {
-	          line: {
-	          	color: "black",
-	          	width: 1
-	          }
-		    },
-		  name: ""+ offence1 +"",
-		  opacity: 0.5, 
-		  type: "histogram", 
-		  ybins: {
-		    end: 4, 
-		    size: 0.04, 
-		    start: .5
-		  }
-		};
-		var trace2 = {
-		  x: y2, 
-		  marker: {
-	          color: "red",
-	          line: {
-	          	color: "black",
-	          	width: 1
-	          }
-		    }, 
-		  name: ""+ offence2 +"",
-		  opacity: 0.75, 
-		  type: "histogram", 
-		  ybins: { 
-		    end: 4, 
-		    size: 0.04, 
-		    start: -3.2
-		  }
-		};
-		var data = [trace1, trace2];
-
-		var layout = {
-		  // bargap: 0.05, 
-		  // bargroupgap: 0.2, 
-		  barmode: "overlay", 
-		  title: "Histogram", 
-		  xaxis: {title: "Value"}, 
-		  yaxis: {title: "Frequency"},
-	  	  legend: {
-		    x: 1,
-		    y: 0.5,
-		    font: {
-		    	size: 6
-		    }
-		  }
-		};
-		Plotly.newPlot('graph4', data, layout, {responsive: true});
-
 			});
 		});
-	};
+
+		// ------------- Plot Histogram -------------
+		var formDataBarGraph1 = new FormData();
+	    var formDataBarGraph1 =  {
+	        	"$select" : "date_extract_m(date) as month1"
+	        	+ ", "
+	        	+ 'count(primary_type) as offence1',
+	        	"$group" : "month1",
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
+	        	+ " AND latitude IS NOT NULL",
+	        	"arrest" : arrest,
+	        	"domestic" : domestic,
+				"primary_type" : offence1,
+	        	"$order" : "month1 ASC",
+	        	"$limit" : 200000,
+	        	"$$app_token" : app_token};
+
+	        if (arrest == "All"){
+				delete formDataBarGraph1.arrest;
+			}if (domestic == "All"){
+				delete formDataBarGraph1.domestic;
+			}else{
+
+			};
+
+		var formDataBarGraph2 = new FormData();
+	    var formDataBarGraph2 =  {
+	        	"$select" : "date_extract_m(date) as month2"
+	        	+ ", "
+	        	+ 'count(primary_type) as offence2',
+	        	"$group" : "month2",
+	        	"$where" : "date >='" + startDate + "'"
+	        	+ " AND date <='" + endDate + "'"
+	        	+ " AND latitude IS NOT NULL",
+	        	"arrest" : arrest,
+	        	"domestic" : domestic,
+				"primary_type" : offence2,
+	        	"$order" : "month2 ASC",
+	        	"$limit" : 200000,
+	        	"$$app_token" : app_token};
+
+	        if (arrest == "All"){
+				delete formDataBarGraph2.arrest;
+			}if (domestic == "All"){
+				delete formDataBarGraph2.domestic;
+			}else{
+
+			};
 
 
+		$.ajax({
+			url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
+			method: "GET",
+			dataType: "json",
+		    data: formDataBarGraph1,
+		}).done(function (data1) {
+			var data1 = data1.features;
+			$.ajax({
+				url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
+				method: "GET",
+				dataType: "json",
+			    data: formDataBarGraph2,
+			}).done(function (data2) {
+				var data2 = data2.features;
 
+				var offence1= $("#crimeType1").val();
+				var offence2= $("#crimeType2").val();
+				var trace1 = data1;
+				var trace2 = data2;
+
+				console.log(trace1, trace2);
+
+				var y1 = [];
+
+				var y2 = [];
+
+
+				var Year1 = new Date($("#startDate").val()).getFullYear();
+				var Year2 = new Date($("#endDate").val()).getFullYear();
+				var numYear = Year2 - Year1;
+
+				for(var i =0; i < data1.length; i++){
+					y1.push(data1[i].properties.offence1/numYear);
+				};
+
+				for(var i =0; i < data2.length; i++){
+					y2.push(data2[i].properties.offence2/numYear);
+				};
+
+				var month = new Array(12);
+				month[0] = "January";
+				month[1] = "February";
+				month[2] = "March";
+				month[3] = "April";
+				month[4] = "May";
+				month[5] = "June";
+				month[6] = "July";
+				month[7] = "August";
+				month[8] = "September";
+				month[9] = "October";
+				month[10] = "November";
+				month[11] = "December";
+
+
+				var trace1 = 
+					  {
+					x: month,
+					y: y1,
+				    type: "bar",
+				    textfont: {
+				        size: 12,
+				        color: '#000'
+				      },
+				    name: ''+ $("#crimeType1").val() + '',  
+				    marker: {
+			           line: {
+			            color:  "black", 
+			            width: 1
+			    	},
+			    	} 
+					};
+
+				var trace2 = 
+					  {
+					x: month,
+					y: y2,
+				    type: "bar",
+				    textfont: {
+				        size: 12,
+				        color: '#000'
+				      },
+				    name: ''+ $("#crimeType2").val() + '', 
+				    marker: {
+				    	color: 'red',
+			           line: {
+			            color:  "black", 
+			            width: 1
+			    	},
+			    	} 
+					};
+
+				var data = [trace1,trace2];
+
+				var layout = {
+				  title: 'Average Monthly Crime from '+ $("#startDate").val() + ' to '+ $("#endDate").val() + '',
+				  yaxis: {
+			    		fixedrange: true,
+			    		title: "Count"
+			    	}
+				};
+
+			Plotly.newPlot('graph4', data, layout,{responsive: true});	
+		});
+	});
+};
