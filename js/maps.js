@@ -295,31 +295,31 @@ function heatLayer(data) {
 
 
 	// ---------- PLOT CLUSTER MAP ---------------
-// var clusters;
+var clusters;
 
-// function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
-// 	if(clusters){
-// 		map.removeLayer(clusters);
-// 		layerControl.removeLayer(clusters);
-// 	}
-// 	var geoJsonLayer =  L.geoJson(data,{
-// 			pointToLayer: function(feature, latlng){
-// 				var marker = L.marker(latlng);
-// 				marker.bindPopup(
-// 					"<b>Crime Type: </b>"+feature.properties.primary_type + 
-// 					"</br>" +
-// 					"<b>Description: </b>"+feature.properties.description  + 
-// 					"</br>" +
-// 					"<b>Block: </b>"+feature.properties.block  + 
-// 					"</br>" +
-// 					"<b>Date: </b>"+feature.properties.date);
-// 				return marker;
-// 			},
-//         });
+function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
+	if(clusters){
+		map.removeLayer(clusters);
+		layerControl.removeLayer(clusters);
+	}
+	var geoJsonLayer =  L.geoJson(data,{
+			pointToLayer: function(feature, latlng){
+				var marker = L.marker(latlng);
+				marker.bindPopup(
+					"<b>Crime Type: </b>"+feature.properties.primary_type + 
+					"</br>" +
+					"<b>Description: </b>"+feature.properties.description  + 
+					"</br>" +
+					"<b>Block: </b>"+feature.properties.block  + 
+					"</br>" +
+					"<b>Date: </b>"+feature.properties.date);
+				return marker;
+			},
+        });
 
-// 	var clusters = L.markerClusterGroup();
+	var clusters = L.markerClusterGroup();
 
-//     clusters.addLayer(geoJsonLayer);
-//     map.addLayer(clusters);
-//     layerControl.addOverlay(clusters, "Clusters")
-// };
+    clusters.addLayer(geoJsonLayer);
+    map.addLayer(clusters);
+    layerControl.addOverlay(clusters, "Clusters")
+};
