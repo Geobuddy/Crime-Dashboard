@@ -257,8 +257,8 @@ $('.form-control').change(function() {
 		dataType: "json",
         data: formHeatmap,
 	}).done(function(data) {
-		// clusterLayer(data);
 		heatLayer(data);
+		clusterLayer(data);
 		graph1(data);
 		graph4(data);
 	});
@@ -296,13 +296,13 @@ function heatLayer(data) {
 
 	// ---------- PLOT CLUSTER MAP ---------------
 var clusters;
-
 function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
 	if(clusters){
 		map.removeLayer(clusters);
 		layerControl.removeLayer(clusters);
 	}
-	var geoJsonLayer =  L.geoJson(data,{
+	clusters = new L.markerClusterGroup();
+	var geoJsonLayer = new L.geoJson(data,{
 			pointToLayer: function(feature, latlng){
 				var marker = L.marker(latlng);
 				marker.bindPopup(
@@ -317,9 +317,6 @@ function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
 			},
         });
 
-	var clusters = L.markerClusterGroup();
-
     clusters.addLayer(geoJsonLayer);
-    map.addLayer(clusters);
     layerControl.addOverlay(clusters, "Clusters")
 };
