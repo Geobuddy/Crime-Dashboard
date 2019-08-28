@@ -1,6 +1,5 @@
 var app_token = "GhcK7Cj79Lg5uRtd5hPdldrnY";
 loadDropdowns();
-loadPage();
 
 function loadDropdowns() {
 
@@ -62,7 +61,8 @@ function loadDropdowns() {
 	});
 }
 
-function loadPage() {
+// Function to make AJAX request everytime class .form-control is altered
+$('.form-control').change(function() {
 
 		var offence1= $("#crimeType1").val();
 		var offence2= $("#crimeType2").val();
@@ -421,6 +421,7 @@ function loadPage() {
 			for(var i =0; i < data2.length; i++){
 				y2.push(data2[i].properties.offence2);
 				x2.push(new Date(data2[i].properties.date2));
+				};
 			
 			var Trace1 = {
 					name: ""+ offence1 +"",
@@ -464,7 +465,6 @@ function loadPage() {
 			
 			var plot = [Trace1, Trace2]
 			Plotly.newPlot('graph2', plot,layout, {responsive: true});
-		};
 
 			});
 		});
@@ -623,4 +623,4 @@ function loadPage() {
 			Plotly.newPlot('graph4', data, layout,{responsive: true});	
 		});
 	});
-};
+});
