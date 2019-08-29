@@ -282,7 +282,7 @@ function graph3(data) {
 		xMonth.push(month[new Date(data[i].properties.month).getMonth()]);
 	};
 
-	// console.log(yCount,xMonth);
+	console.log(yCount,xMonth);
 
 	var trace1 = 
 		  {
