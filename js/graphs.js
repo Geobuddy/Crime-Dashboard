@@ -2,8 +2,7 @@ startingAlert();
 
 function startingAlert(){
 	alert("Please select a filter parameter.")
-}
-
+};
 
 function foo(arr) {
     var a = [], b = [], prev;
@@ -146,7 +145,6 @@ function graph2(data) {
 	for(var i =0; i < data.length; i++){
 		y.push(data[i].properties.offence);
 		x.push(new Date(data[i].properties.date));
-
 	};
 
 	
@@ -264,7 +262,6 @@ function graph3(data) {
 	else{
 		timePeriod = numDay;
 	}
-
 
 	var month = new Array(12);
 	month[0] = "January";
