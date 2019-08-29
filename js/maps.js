@@ -253,7 +253,7 @@ $('.form-control').change(function() {
         data: formHeatmap,
 	}).done(function(data) {
 		heatLayer(data);
-		clusterLayer(data);
+		// clusterLayer(data);
 		graph1(data);
 		graph4(data);
 	});
@@ -290,28 +290,28 @@ function heatLayer(data) {
 
 
 	// ---------- PLOT CLUSTER MAP ---------------
-var clusters;
-function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
-	if(clusters){
-		map.removeLayer(clusters);
-		layerControl.removeLayer(clusters);
-	}
-	clusters = new L.markerClusterGroup();
-	var geoJsonLayer = new L.geoJson(data,{
-			pointToLayer: function(feature, latlng){
-				var marker = L.marker(latlng);
-				marker.bindPopup(
-					"<b>Crime Type: </b>"+feature.properties.primary_type + 
-					"</br>" +
-					"<b>Description: </b>"+feature.properties.description  + 
-					"</br>" +
-					"<b>Block: </b>"+feature.properties.block  + 
-					"</br>" +
-					"<b>Date: </b>"+feature.properties.date);
-				return marker;
-			},
-        });
+// var clusters;
+// function clusterLayer(data){ //Inherited from AJAX in heatmapLayer
+// 	if(clusters){
+// 		map.removeLayer(clusters);
+// 		layerControl.removeLayer(clusters);
+// 	}
+// 	clusters = new L.markerClusterGroup();
+// 	var geoJsonLayer = new L.geoJson(data,{
+// 			pointToLayer: function(feature, latlng){
+// 				var marker = L.marker(latlng);
+// 				marker.bindPopup(
+// 					"<b>Crime Type: </b>"+feature.properties.primary_type + 
+// 					"</br>" +
+// 					"<b>Description: </b>"+feature.properties.description  + 
+// 					"</br>" +
+// 					"<b>Block: </b>"+feature.properties.block  + 
+// 					"</br>" +
+// 					"<b>Date: </b>"+feature.properties.date);
+// 				return marker;
+// 			},
+//         });
 
-    map.addLayer(geoJsonLayer);
-    layerControl.addOverlay(clusters, "Clusters")
-};
+//     map.addLayer(geoJsonLayer);
+//     layerControl.addOverlay(clusters, "Clusters")
+// };
