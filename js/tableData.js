@@ -1,3 +1,9 @@
+startingAlert();
+
+function startingAlert(){
+	alert("Please select a filter parameter.")
+}
+
 var app_token = "GhcK7Cj79Lg5uRtd5hPdldrnY";
 
 $(window).on('load',function() {

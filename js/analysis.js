@@ -1,3 +1,9 @@
+startingAlert();
+
+function startingAlert(){
+	alert("Please select a filter parameter.")
+}
+
 var app_token = "GhcK7Cj79Lg5uRtd5hPdldrnY";
 loadDropdowns();
 
@@ -128,7 +134,6 @@ $('.form-control').change(function() {
 				arr.push(data[i].properties.primary_type);
 			}
 			var result = foo(arr);
-			// console.log(result);
 			var barChart = [{
 					x:result[1],
 					y:result[0],
@@ -536,27 +541,36 @@ $('.form-control').change(function() {
 
 				var offence1= $("#crimeType1").val();
 				var offence2= $("#crimeType2").val();
-				var trace1 = data1;
-				var trace2 = data2;
 
 				console.log(trace1, trace2);
 
-				var y1 = [];
+				var yCount1 = []; //Average count
+				var xMonth1 = []; //Months
 
-				var y2 = [];
+				var yCount2 = []; //Average count
+				var xMonth2 = []; //Months
 
+				var year1 = new Date($("#startDate").val()).getFullYear();
+				var year2 = new Date($("#endDate").val()).getFullYear();
+				var month1 = new Date($("#startDate").val()).getMonth();
+				var month2 = new Date($("#endDate").val()).getMonth();
+				var day1 = new Date($("#startDate").val()).getDate();
+				var day2 = new Date($("#endDate").val()).getDate();
+				var numYear = year2 - year1;
+				var numMonth = month2 - month1;
+				var numDay = day2 - day1;
 
-				var Year1 = new Date($("#startDate").val()).getFullYear();
-				var Year2 = new Date($("#endDate").val()).getFullYear();
-				var numYear = Year2 - Year1;
+				var timePeriod;
 
-				for(var i =0; i < data1.length; i++){
-					y1.push(data1[i].properties.offence1/numYear);
-				};
-
-				for(var i =0; i < data2.length; i++){
-					y2.push(data2[i].properties.offence2/numYear);
-				};
+				if (numYear > 0){
+					timePeriod = numYear;
+				}
+				if (numMonth > 0) {
+					timePeriod = numMonth;
+				}
+				else{
+					timePeriod = numDay;
+				}
 
 				var month = new Array(12);
 				month[0] = "January";
@@ -572,11 +586,20 @@ $('.form-control').change(function() {
 				month[10] = "November";
 				month[11] = "December";
 
+				for(var i =0; i < data1.length; i++){
+					yCount1.push(data1[i].properties.offence1/timePeriod);
+					xMonth1.push(month[new Date(data1[i].properties.month1).getMonth()]);
+				};
+
+				for(var i =0; i < data2.length; i++){
+					yCount2.push(data2[i].properties.offence2/timePeriod);
+					xMonth2.push(month[new Date(data2[i].properties.month2).getMonth()]);
+				};
 
 				var trace1 = 
 					  {
-					x: month,
-					y: y1,
+					x: xMonth1,
+					y: yCount1,
 				    type: "bar",
 				    textfont: {
 				        size: 12,
@@ -593,8 +616,8 @@ $('.form-control').change(function() {
 
 				var trace2 = 
 					  {
-					x: month,
-					y: y2,
+					x: xMonth2,
+					y: yCount2,
 				    type: "bar",
 				    textfont: {
 				        size: 12,

@@ -1,3 +1,10 @@
+startingAlert();
+
+function startingAlert(){
+	alert("Please select a filter parameter.")
+}
+
+
 function foo(arr) {
     var a = [], b = [], prev;
     
@@ -233,15 +240,31 @@ function graph3(data) {
 	var offence= $("#crimeType").val();
 
 	var data = data.features;
-	var yHist = [];
+	var yCount = []; //Average count
+	var xMonth = []; //Months
 
-	var Year1 = new Date($("#startDate").val()).getFullYear();
-	var Year2 = new Date($("#endDate").val()).getFullYear();
-	var numYear = Year2 - Year1
+	var year1 = new Date($("#startDate").val()).getFullYear();
+	var year2 = new Date($("#endDate").val()).getFullYear();
+	var month1 = new Date($("#startDate").val()).getMonth();
+	var month2 = new Date($("#endDate").val()).getMonth();
+	var day1 = new Date($("#startDate").val()).getDate();
+	var day2 = new Date($("#endDate").val()).getDate();
+	var numYear = year2 - year1;
+	var numMonth = month2 - month1;
+	var numDay = day2 - day1;
 
-	for(var i =0; i < data.length; i++){
-		yHist.push(data[i].properties.offence/numYear);
-	};
+	var timePeriod;
+
+	if (numYear > 0){
+		timePeriod = numYear;
+	}
+	if (numMonth > 0) {
+		timePeriod = numMonth;
+	}
+	else{
+		timePeriod = numDay;
+	}
+
 
 	var month = new Array(12);
 	month[0] = "January";
@@ -257,11 +280,17 @@ function graph3(data) {
 	month[10] = "November";
 	month[11] = "December";
 
+	for(var i =0; i < data.length; i++){
+		yCount.push(data[i].properties.offence/timePeriod);
+		xMonth.push(month[new Date(data[i].properties.month).getMonth()]);
+	};
+
+	// console.log(yCount,xMonth);
 
 	var trace1 = 
 		  {
-		x: month,
-		y: yHist,
+		x: xMonth,
+		y: yCount,
 	    type: "bar",
 	    bins: {
 		    end: 2.8, 
