@@ -39,7 +39,7 @@ To deploy this application use the following steps:
 
 <img width="1440" alt="Screenshot 2019-08-20 at 10 46 12" src="https://user-images.githubusercontent.com/41435578/64069330-8a7d8a80-cc3f-11e9-82d8-4d7e15e2d2c2.png">
 
-**Figure 4:** Cluster map crime clusters in Chicago
+**Figure 4:** Cluster map crime clusters in Chicago.
 
 
 ## Analysis
@@ -50,6 +50,8 @@ To deploy this application use the following steps:
 
 
 ## Data
+
+The Data section of the dashboard enables the user to navigate to a new page (**Figure 6:**) where data is displayed in table form. Similar to the main page the user can filter the data using the sidebar on the left. For further filtering of the data, the user can type inside the search space inbuilt in the table as well as ordering the table in ascending and descending order.
 
 <img width="1440" alt="Screenshot 2019-08-13 at 23 53 05" src="https://user-images.githubusercontent.com/41435578/64080578-0f26e200-ccee-11e9-870f-eecd1b0d51b4.png">
 
