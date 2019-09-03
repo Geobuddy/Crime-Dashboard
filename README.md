@@ -23,11 +23,14 @@ To deploy this application use the following steps:
 
 ## Graphical User Interface
 
+The graphical user interface is an interactive component that enables the interaction between an electronic device and a user. **Figure 1** shows the implementation of a user-friendly graphical interface intended to enhance the user experience (UX). The main components of the interface are highlighted in red boxes. These are the sidebar comprising the filtering parameters (e.g. Offence Group and Dates), a map and collapsible buttons that display graphs when clicked.
+
 <img width="1440" alt="Screenshot 2019-08-20 at 10 46 12" src="https://user-images.githubusercontent.com/41435578/64069299-1216c980-cc3f-11e9-9d1e-6de3b87cd25c.png">
 
 **Figure 1:** Chicago Crime Dashboard graphical user interface.
 
 ## Visualisation
+In this project, we have used Open Street Map (OSM) and Carto DB basemaps which can be displayed by check the according box in the leaflet layer control located on the top right corner of the map. The basemaps can be overlain by three distinct mapping layers. Three distinct mapping visualisation techniques were adopted, a choropleth map **Figure 2**, a heatmap **Figure 3** and a cluster map **Figure 4**. A mouse pointing highlight function is available in the choropleth map enabling the user to visualise information dynamically about the chosen community area. This information is displayed in an information box located on the top right corner of the map.
 
 <img width="1440" alt="Screenshot 2019-08-20 at 10 46 12" src="https://user-images.githubusercontent.com/41435578/64069311-3f637780-cc3f-11e9-95f8-c95b4b5a67a7.png">
 
@@ -44,6 +47,8 @@ To deploy this application use the following steps:
 
 ## Analysis
 
+The analysis section shown in (**Figure 5**), is a section of the dashboard in which the user can input two different crime type variables under the “Offence Group” dropdown to visualise and compare their trends. Similar to the graphs and charts in the previous section, this section enables the user to carry out a comparative analysis between two crime types identifying whether certain crimes follow similar trends and patterns.
+
 <img width="1440" alt="Screenshot 2019-08-20 at 10 49 48" src="https://user-images.githubusercontent.com/41435578/64069336-9701e300-cc3f-11e9-8a91-4a2d646b7705.png">
 
 **Figure 5:** shown the analytic section of the dashboard under the analysis tab. In this section, the user can compare statistics between two distinct crime types.
@@ -51,7 +56,7 @@ To deploy this application use the following steps:
 
 ## Data
 
-The Data section of the dashboard enables the user to navigate to a new page (**Figure 6:**) where data is displayed in table form. Similar to the main page the user can filter the data using the sidebar on the left. For further filtering of the data, the user can type inside the search space inbuilt in the table as well as ordering the table in ascending and descending order.
+The Data section of the dashboard enables the user to navigate to a new page (**Figure 6**) where data is displayed in table form. Similar to the main page the user can filter the data using the sidebar on the left. For further filtering of the data, the user can type inside the search space inbuilt in the table as well as ordering the table in ascending and descending order.
 
 <img width="1440" alt="Screenshot 2019-08-13 at 23 53 05" src="https://user-images.githubusercontent.com/41435578/64080578-0f26e200-ccee-11e9-870f-eecd1b0d51b4.png">
 
