@@ -14,7 +14,7 @@ To deploy this application use the following steps:
 
 3. Deploy the application using a local host for example [Node.js live-server](https://gist.github.com/donmccurdy/20fb112949324c92c5e8).
 
-**Note:** The app call also be deployed remotely using [Heroku](https://https://heroku.com) and [GithubPages](https://https://github.com)
+**Note:** The App can also be deployed remotely using [Heroku](https://https://heroku.com) and [GithubPages](https://https://github.com)
 
 
 ## Data Resources
