@@ -1,12 +1,6 @@
-startingAlert();
-
-function startingAlert(){
-	alert("Please select a filter parameter.")
-}
-
+function main() {
 var app_token = "GhcK7Cj79Lg5uRtd5hPdldrnY";
 
-$(window).on('load',function() {
 	$('.form-control').change(function() {
 		var offence= $("#crimeType").val();
 		var arrest= $("#arrest").val();
@@ -24,7 +18,7 @@ $(window).on('load',function() {
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,
 				"primary_type" : offence,
-				"$limit": 200000,
+				"$limit": 2000,
 	        	"$$app_token" : app_token};
 
 	        if (offence == "All") {
@@ -61,5 +55,7 @@ $(window).on('load',function() {
 		        ]
 			});
 		});
-	});
-});
+	}).change();
+};
+
+window.onload = main;

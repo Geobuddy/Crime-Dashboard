@@ -1,12 +1,6 @@
-startingAlert();
-
-function startingAlert(){
-	alert("Please select a filter parameter.")
-};
-
 function foo(arr) {
     var a = [], b = [], prev;
-    
+
     arr.sort();
     for ( var i = 0; i < arr.length; i++ ) {
         if ( arr[i] !== prev ) {
@@ -16,7 +10,7 @@ function foo(arr) {
             b[b.length-1]++;
         }
         prev = arr[i];
-    }  
+    }
     return [a, b];
 }
 
@@ -140,14 +134,14 @@ function graph2(data) {
 	        step: 'all',
 	    }],
 	};
-	
+
 
 	for(var i =0; i < data.length; i++){
 		y.push(data[i].properties.offence);
 		x.push(new Date(data[i].properties.date));
 	};
 
-	
+
 	var total = 0;
 	for(var i = 0; i < data.length; i++) {
 	    total += +data[i].properties.offence;
@@ -191,11 +185,11 @@ function graph2(data) {
     		title: "Crime Count"
     	},
 	};
-	
+
 	var plot = [barChart, trace]
 	Plotly.newPlot('graph2', plot,layout, {responsive: true})
 
-}	
+}
 	var formDataBarGraph = new FormData();
 
     var formDataBarGraph =  {
@@ -231,7 +225,7 @@ function graph2(data) {
 	}).done(function(data) {
 		graph3(data);
 		});
-});
+}).change();
 
 function graph3(data) {
 
@@ -282,24 +276,22 @@ function graph3(data) {
 		xMonth.push(month[new Date(data[i].properties.month).getMonth()]);
 	};
 
-	console.log(yCount,xMonth);
-
-	var trace1 = 
+	var trace1 =
 		  {
 		x: xMonth,
 		y: yCount,
 	    type: "bar",
 	    bins: {
-		    end: 2.8, 
-		    size: 0.06, 
+		    end: 2.8,
+		    size: 0.06,
 		    start: .5
 		  },
 	    marker: {
            line: {
-            color:  "black", 
+            color:  "black",
             width: 1
     	},
-    	} 
+    	}
 		};
 
 	var data = [trace1];
@@ -319,7 +311,7 @@ function graph4(data) {
 	//data from Heatmap AJAX request
 
 	// ---------- Plot Pie chart for Arrest and Domestic count ---------------
-	
+
 	var myData = data.features;
 
 	var xPie1 = [];

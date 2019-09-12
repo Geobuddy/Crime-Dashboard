@@ -1,4 +1,4 @@
-$(document).ready(function() {
+function main() {
 	$('.form-control').change(function(e) {
 		e.preventDefault();
 		/* Act on the event */
@@ -7,7 +7,7 @@ $(document).ready(function() {
 		var domestic= $("#domestic").val();
 		var startDate= $("#startDate").val();
 		var endDate= $("#endDate").val();
-		console.log(offence, arrest, domestic, startDate,endDate);
+		// console.log(offence, arrest, domestic, startDate,endDate);
 
 		// -------------------------- QUERY FOR CHOROPLETH LAYER IN SVG ---------------------
 
@@ -20,7 +20,7 @@ $(document).ready(function() {
 	        	"$group" : "community_area",
 	        	"$where" : "date >='" + startDate + "'"
 	        	+ " AND date <='" + endDate + "'"
-	        	+ " AND latitude IS NOT NULL", 
+	        	+ " AND latitude IS NOT NULL",
 	        	"arrest" : arrest,
 	        	"domestic" : domestic,
 				"primary_type" : offence,
@@ -39,7 +39,7 @@ $(document).ready(function() {
 			}else{
 				// return formData
 			};
-		
+
 			$.ajax({
 				url: 'https://data.cityofchicago.org/resource/ijzp-q8t2.geojson',
 				method: "GET",
@@ -82,7 +82,7 @@ $(document).ready(function() {
 											myBoundary[j].properties.crime_rate = (count / pop )*1000;
 											break;
 										}
-										
+
 									}
 								}
 							}
@@ -90,9 +90,10 @@ $(document).ready(function() {
 					});
 				});
 			});
-	});
-});
+	}).change();
+};
 
+window.onload = main
 // ------------ CHOROPLETH LAYER --------------------// adapted from:view-source:https://leafletjs.com/examples/choropleth/example.html
 
 // control that shows state info on hover
@@ -112,17 +113,6 @@ info.update = function (props) {
 };
 
 info.addTo(map);
-
-
-// get color depending on population density value
-// function getColor(d) {
-// 	return d //> 1000 ? '#253494' :
-// 			// d > 500  ? '#2c7fb8' :
-// 			// d > 200  ? '#41b6c4' :
-// 			// d > 100  ? '#7fcdbb' :
-// 			// d > 50   ? '#c7e9b4' :
-// 			// 			'#ffffcc';
-// }
 
 function style(feature) {
 	return {
@@ -156,15 +146,30 @@ function resetHighlight(e) {
 	info.update();
 }
 
-function zoomToFeature(e) {
-	map.fitBounds(e.target.getBounds());
+function selectLocation(e) {
+	var layer = e.target;
+
+	layer.setStyle({
+		weight: 3,
+		color: '#000000',
+		dashArray: '',
+		fillOpacity: 1
+	});
+
+	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+		layer.bringToFront();
+	}
+	// map.fitBounds(e.target.getBounds());
+	var selectedLocation = e.target.feature.properties.area_numbe;
+	// return selectedLocation;
+	// console.log(selectedLocation);
 }
 
 function onEachFeature(feature, layer) {
 	layer.on({
 		mouseover: highlightFeature,
 		mouseout: resetHighlight,
-		click: zoomToFeature
+		click: selectLocation
 	});
 }
 
@@ -211,7 +216,7 @@ div.innerHTML = '<div><h3 style="font-weight:bolder;font-size:larger;">Crime Rat
 
 
 legend.addTo(map);
-// 
+//
 
 //============================================//========================//
 
@@ -253,12 +258,12 @@ $('.form-control').change(function() {
         data: formHeatmap,
 	}).done(function(data) {
 		heatLayer(data);
-		// clusterLayer(data);
 		graph1(data);
 		graph4(data);
+		// clusterLayer(data);
 	});
-});
-	
+}).change();
+
 	// ---------- PLOT HEATMAP ---------------
 
 // Adapted from: https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html
@@ -301,11 +306,11 @@ function heatLayer(data) {
 // 			pointToLayer: function(feature, latlng){
 // 				var marker = L.marker(latlng);
 // 				marker.bindPopup(
-// 					"<b>Crime Type: </b>"+feature.properties.primary_type + 
+// 					"<b>Crime Type: </b>"+feature.properties.primary_type +
 // 					"</br>" +
-// 					"<b>Description: </b>"+feature.properties.description  + 
+// 					"<b>Description: </b>"+feature.properties.description  +
 // 					"</br>" +
-// 					"<b>Block: </b>"+feature.properties.block  + 
+// 					"<b>Block: </b>"+feature.properties.block  +
 // 					"</br>" +
 // 					"<b>Date: </b>"+feature.properties.date);
 // 				return marker;

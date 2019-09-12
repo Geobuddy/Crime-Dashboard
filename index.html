@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -43,9 +43,10 @@
 
     <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/MarkerCluster.css' rel='stylesheet' />
 
-	<link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/MarkerCluster.Default.css' rel='stylesheet' />
+	  <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/MarkerCluster.Default.css' rel='stylesheet' />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/leaflet.markercluster.js"></script>
+
 
     <!--the following links incorporate the CSS required for custom icon creation -->
     <link rel="stylesheet" href="./css/ionicons.min.css">
@@ -66,7 +67,7 @@
                 <select id="crimeType" name="crimeType" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
                 </select>
                 <label for="startDate"><b>Start Date</b></label>
-                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2016-01-01">
+                <input autocomplete="off" type='text' class="form-control" id="startDate" name="startDate" value="2018-01-01">
                 <label for="endDate"><b>End Date</b></label>
                 <input autocomplete="off" type='text' class="form-control" id="endDate" name="endDate" value="2019-07-31">
                 <label for="group"><b>Arrest</b></label>
@@ -74,7 +75,7 @@
                 </select>
                 <label for="group"><b>Domestic</b></label>
                 <select id="domestic" class="form-control"><option value="All" selected="selected"> -- ALL --</option>
-                </select>            
+                </select>
             </ul>
 
             <ul class="list-unstyled" style="margin-left: 10px">
@@ -142,6 +143,9 @@
     <script src="js/maps.js"></script>
     <script src="js/choropleth.js"></script>
     <script src="js/graphs.js"></script>
+    <script src="js/d3.js"></script>
+    <script src="js/crossfilter.js"></script>
+    <script src="js/dc.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
