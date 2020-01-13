@@ -32,7 +32,7 @@ The graphical user interface is an interactive component that enables the intera
 **Figure 1:** Chicago Crime Dashboard graphical user interface.
 
 ## Visualisation
-In this project, we have used Open Street Map (OSM) and Carto DB basemaps which can be displayed by check the according box in the leaflet layer control located on the top right corner of the map. The basemaps can be overlain by three distinct mapping layers. Three distinct mapping visualisation techniques were adopted, a choropleth map **Figure 2**, a heatmap **Figure 3** and a cluster map **Figure 4**. A mouse pointing highlight function is available in the choropleth map enabling the user to visualise information dynamically about the chosen community area. This information is displayed in an information box located on the top right corner of the map.
+In this project, we have used Open Street Map (OSM) and Carto DB basemaps which can be displayed by checking the according box in the leaflet layer control located on the top right corner of the map. The basemaps can be overlain by three distinct mapping layers. Three distinct mapping visualisation techniques were adopted, a choropleth map **Figure 2**, a heatmap **Figure 3** and a cluster map **Figure 4**. A mouse pointing highlight function is available in the choropleth map enabling the user to visualise information dynamically about the chosen community area. This information is displayed in an information box located on the top right corner of the map.
 
 <img width="1440" alt="Screenshot 2019-08-20 at 10 46 12" src="https://user-images.githubusercontent.com/41435578/64069311-3f637780-cc3f-11e9-95f8-c95b4b5a67a7.png">
 
